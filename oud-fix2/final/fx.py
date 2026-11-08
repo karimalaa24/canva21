@@ -69,12 +69,35 @@ for i in range(len(frames)):
         add=(glow*pulse+sp)[...,None]*GOLD+line[...,None]*np.array([215,245,255],np.float32)*0.95
         img=img+add
     if L4[0]<=i<L4[1]:
-        u=(i-L4[0])/(L4[1]-L4[0])
-        yy,xx=np.mgrid[0:H:8,0:W:8].astype(np.float32)
-        warm=np.exp(-(((xx-560)/520)**2+((yy-1150)/430)**2))*(0.10+0.03*np.sin(u*6.28*1.5))
-        cx=-300+1700*u; band=np.exp(-((xx+0.55*(yy-1150)-cx)/170)**2)*0.10*np.sin(np.pi*u)
-        m=cv2.resize(warm+band,(W,H),interpolation=cv2.INTER_LINEAR)
-        img=img*(1+m[...,None]*np.array([0.55,0.85,1.0],np.float32))
+        j=i-L4[0]; tt=j/30; TT=(L4[1]-L4[0]-1)/30
+        u=0 if tt<=2 else (tt-2)/(TT-2); e=u*u*(3-2*u)*0.5+u*0.5; zs=1+0.22*e
+        Z=lambda x,y:(470+zs*(x-470),1150+zs*(y-1150))
+        fr=frames[i]; g=cv2.cvtColor(fr,cv2.COLOR_BGR2GRAY).astype(np.float32)
+        # 1) warm bloom on highlights (gold, lettering, lantern), breathing
+        hi=np.clip((g-150)/80,0,1); bloom=cv2.GaussianBlur(hi,(0,0),18)*0.55+cv2.GaussianBlur(hi,(0,0),45)*0.35
+        br=0.75+0.25*np.sin(tt*1.6)
+        img=img+bloom[...,None]*np.array([60,150,235],np.float32)*br
+        # 2) golden light sweeps across the products (two passes)
+        prod=np.zeros((H,W),np.float32); P=np.array([Z(40,860),Z(1070,860),Z(1070,1430),Z(40,1430)],np.int32); cv2.fillPoly(prod,[P],1.0)
+        prod=cv2.GaussianBlur(prod,(0,0),40)
+        yy,xx=np.mgrid[0:H,0:W].astype(np.float32)
+        for (t0,t1) in ((2.4,4.6),(6.6,8.8)):
+            if t0<=tt<=t1:
+                v=(tt-t0)/(t1-t0); cx=-400+1900*v
+                band=np.exp(-((xx*0.8+0.6*(yy-1150)-cx)/120)**2)*np.sin(np.pi*v)
+                img=img*(1+(band*prod*0.38)[...,None]*np.array([0.45,0.8,1.0],np.float32))
+        # 3) twinkling star glints on gold details
+        G=[(555,970,0.6),(200,1080,1.9),(620,1140,3.2),(640,1255,4.4),(295,1355,5.5),(640,1365,6.3),(905,1080,7.2),(800,920,8.1),(1055,920,8.9),(625,1215,9.6)]
+        star=np.zeros((H,W),np.float32)
+        for gx,gy,gt in G:
+            d=tt-gt
+            if 0<=d<=0.9:
+                a=np.sin(np.pi*d/0.9); x,y=Z(gx,gy); x,y=int(x),int(y); L=int(38*a*zs)
+                cv2.line(star,(x-L,y),(x+L,y),a,2,cv2.LINE_AA); cv2.line(star,(x,y-L),(x,y+L),a,2,cv2.LINE_AA)
+                l2=int(L*0.45); cv2.line(star,(x-l2,y-l2),(x+l2,y+l2),a*0.7,1,cv2.LINE_AA); cv2.line(star,(x-l2,y+l2),(x+l2,y-l2),a*0.7,1,cv2.LINE_AA)
+                cv2.circle(star,(x,y),4,a,-1,cv2.LINE_AA)
+        st=cv2.GaussianBlur(star,(0,0),1.2)*1.4+cv2.GaussianBlur(star,(0,0),7)*1.6
+        img=img+st[...,None]*np.array([170,225,255],np.float32)
     frames[i]=np.clip(img,0,255).astype(np.uint8)
 enc=subprocess.Popen(['ffmpeg','-nostdin','-v','error','-y','-f','rawvideo','-pix_fmt','bgr24','-s',f'{W}x{H}','-r','30','-i','-','-i',SRC,'-map','0:v','-map','1:a','-c:v','libx264','-crf','15','-preset','slow','-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',OUT],stdin=subprocess.PIPE)
 for f in frames: enc.stdin.write(f.tobytes())
