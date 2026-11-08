@@ -5,7 +5,7 @@ BOXES=[np.float32([(0,812),(355,800),(380,1110),(560,1290),(558,1415),(95,1500),
        np.float32([(385,885),(700,870),(770,950),(770,1095),(552,1095),(552,1060),(385,1060)]),
        np.float32([(552,1095),(905,1095),(975,1180),(975,1345),(552,1345)])]
 S5=(542,683); S6=(683,797)
-CARD_T=21.67; LINE_T0=23.37; LINE_T1=24.6
+CARD_T=21.67; LINE_T0=23.27; LINE_T1=25.17; L4=(233,541)
 GOLD=np.array([120,205,255],np.float32)   # BGR warm gold
 orb=cv2.ORB_create(3000); bf=cv2.BFMatcher(cv2.NORM_HAMMING,crossCheck=True)
 def tracker(ref):
@@ -53,19 +53,28 @@ for i in range(len(frames)):
         A=A6[i-S6[0]]; prog=ss((t-LINE_T0)/(LINE_T1-LINE_T0)); pulse=0.9+0.1*np.sin((t-LINE_T1)*5)
         line=np.zeros((H,W),np.float32); spark=np.zeros((H,W),np.float32)
         for bi,Bp in enumerate(json.load(open('boxes6.json'))):
-            pts,L=resample(tf(np.float32(Bp),A),500); nn=max(2,int(500*prog))
-            cv2.polylines(line,[pts[:nn].astype(np.int32)],prog>=0.999,1.0,2,cv2.LINE_AA)
-            for kk in range(3):
-                ph=((t*0.35+kk/3+bi*0.17)%1.0)
-                if ph<=prog:
-                    x,y=pts[int(ph*499)]; cv2.circle(spark,(int(x),int(y)),3,1.0,-1,cv2.LINE_AA)
-        glow=cv2.GaussianBlur(line,(0,0),3)*1.2+cv2.GaussianBlur(line,(0,0),10)*1.6+cv2.GaussianBlur(line,(0,0),24)*1.2
-        sp=cv2.GaussianBlur(spark,(0,0),2)*2+cv2.GaussianBlur(spark,(0,0),9)*3
-        core=line*1.0
-        add=(glow*pulse+sp)[...,None]*GOLD+core[...,None]*np.array([200,240,255],np.float32)*0.9
-        if 'prev_add' in globals() and prev_add is not None: add=0.6*add+0.4*prev_add
-        prev_add=add
+            pts,L=resample(tf(np.float32(Bp),A),600); N=600
+            st0=int(np.argmin(pts[:,0]+pts[:,1])); pts=np.roll(pts,-st0,axis=0)
+            half=int(N/2*prog)
+            fw=pts[:half+1]; bw=pts[::-1][:half+1] if half>0 else pts[:1]
+            if prog>=0.999: cv2.polylines(line,[pts.astype(np.int32)],True,1.0,3,cv2.LINE_AA)
+            else:
+                cv2.polylines(line,[fw.astype(np.int32)],False,1.0,3,cv2.LINE_AA)
+                cv2.polylines(line,[np.vstack([pts[:1],pts[::-1][:half]]).astype(np.int32)],False,1.0,3,cv2.LINE_AA)
+                for hp in (fw[-1],bw[-1]): cv2.circle(spark,(int(hp[0]),int(hp[1])),5,1.0,-1,cv2.LINE_AA)
+        settle=ss((t-LINE_T1)/0.6)
+        glow=cv2.GaussianBlur(line,(0,0),4)*1.3+cv2.GaussianBlur(line,(0,0),12)*(1.6+0.6*settle)+cv2.GaussianBlur(line,(0,0),30)*(1.0+0.8*settle)
+        sp=cv2.GaussianBlur(spark,(0,0),2.5)*2.5+cv2.GaussianBlur(spark,(0,0),12)*4
+        pulse=1.0+0.06*np.sin((t-LINE_T1)*3.0)*settle
+        add=(glow*pulse+sp)[...,None]*GOLD+line[...,None]*np.array([215,245,255],np.float32)*0.95
         img=img+add
+    if L4[0]<=i<L4[1]:
+        u=(i-L4[0])/(L4[1]-L4[0])
+        yy,xx=np.mgrid[0:H:8,0:W:8].astype(np.float32)
+        warm=np.exp(-(((xx-560)/520)**2+((yy-1150)/430)**2))*(0.10+0.03*np.sin(u*6.28*1.5))
+        cx=-300+1700*u; band=np.exp(-((xx+0.55*(yy-1150)-cx)/170)**2)*0.10*np.sin(np.pi*u)
+        m=cv2.resize(warm+band,(W,H),interpolation=cv2.INTER_LINEAR)
+        img=img*(1+m[...,None]*np.array([0.55,0.85,1.0],np.float32))
     frames[i]=np.clip(img,0,255).astype(np.uint8)
 enc=subprocess.Popen(['ffmpeg','-nostdin','-v','error','-y','-f','rawvideo','-pix_fmt','bgr24','-s',f'{W}x{H}','-r','30','-i','-','-i',SRC,'-map','0:v','-map','1:a','-c:v','libx264','-crf','15','-preset','slow','-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',OUT],stdin=subprocess.PIPE)
 for f in frames: enc.stdin.write(f.tobytes())
