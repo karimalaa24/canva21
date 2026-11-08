@@ -50,7 +50,14 @@ if cfg.get('fit') == 'floor':   # pieces lie on the floor, may lean part-way up 
     k = np.array(cfg.get('wall_lean', [0.15, 0.15, 0.45, 0.45]), np.float32)[:, None]   # BL,BR,FR,FL: fraction toward rim
     fp = flo + (rim - flo) * k
     area = np.zeros((H, W), np.uint8); cv2.fillPoly(area, [fp.astype(np.int32)], 1); area &= open_
-fitm = cv2.erode(area, np.ones((9, 9), np.uint8)).astype(bool)          # every piece must lie fully inside
+if cfg.get('fit_lining', False):   # exact inside of the box = the visible cream lining of the EMPTY plate
+    lab = cv2.cvtColor(plate.astype(np.uint8), cv2.COLOR_BGR2LAB).astype(np.int16)
+    lin = ((lab[..., 0] > cfg.get('lining_L', 90)) & (np.abs(lab[..., 1] - 128) < 18) & (lab[..., 2] > 126) & (lab[..., 2] < 185) & (lab[..., 2] - lab[..., 1] > 2)).astype(np.uint8)
+    lin = cv2.morphologyEx(lin, cv2.MORPH_CLOSE, np.ones((15, 15), np.uint8)) & open_
+    n_, lb_, st_, _ = cv2.connectedComponentsWithStats(lin); lin = (lb_ == 1 + np.argmax(st_[1:, 4])).astype(np.uint8)
+    cn_, _ = cv2.findContours(lin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE); lin = np.zeros_like(lin); cv2.drawContours(lin, cn_, -1, 1, -1)
+    area &= lin; cv2.imwrite(os.path.splitext(cfg['out'])[0] + '_fitarea.png', area * 255)
+fitm = cv2.erode(area, np.ones((cfg.get('edge_margin', 9),) * 2, np.uint8)).astype(bool)          # every piece must lie fully inside
 inner = cv2.erode(area, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(LEN * 0.45) | 1,) * 2)).astype(bool)
 sc = LEN / 195.0; SHD = (int(-8 * sc), int(11 * sc)); SB = 10 * sc
 cv = Canvas(plate); last = -1
@@ -66,10 +73,10 @@ def try_place(x, y, gain, lift, tries=14, jit=0.2):
     global last
     for _ in range(tries):
         k = (last + rng.randrange(1, len(pool))) % len(pool); _, rgb, a = pool[k]
-        rr, aa = xform(grade(rgb, gain * rng.uniform(0.95, 1.05)), a, LEN * rng.uniform(0.85, 1.05), rng.uniform(0, 360), rng.random() < 0.5, EL, SQ)
+        rr, aa = xform(grade(rgb, gain * rng.uniform(*cfg.get('tone_var', [0.95, 1.05]))), a, LEN * rng.uniform(0.85, 1.05), rng.uniform(0, 360), rng.random() < 0.5, EL, SQ)
         cx = x + rng.uniform(-LEN * jit, LEN * jit); cy = y + rng.uniform(-LEN * jit, LEN * jit)
         if fits(aa, cx, cy):
-            last = k; return cv.place(rr, aa, cx, cy, shadow=(int(SHD[0] * lift), int(SHD[1] * lift)), sblur=SB * lift)
+            last = k; return cv.place(rr, aa, cx, cy, shadow=(int(SHD[0] * lift), int(SHD[1] * lift)), sblur=SB * lift, contact=cfg.get('contact', 0.55), line=cfg.get('line', 0.35), csig=cfg.get('csig', 2.0))
     return None
 
 
@@ -97,7 +104,7 @@ for frac, gain, lift in ((cfg.get('l2', 0.30), 1.02, 1.4), (cfg.get('l3', 0.10),
 # gaps enclosed by wood read as shadow, open edges stay as the box floor
 enc = cv2.morphologyEx((cv.wood > 0.5).astype(np.uint8), cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(LEN * 0.35) | 1,) * 2)).astype(bool)
 g = cv2.GaussianBlur((enc & (cv.wood < 0.5) & (open_ > 0)).astype(np.float32), (0, 0), 3); cv.img *= (1 - 0.6 * g)[..., None]
-clip = cv2.GaussianBlur(open_.astype(np.float32), (3, 3), 0); handm = None
+clip = cv2.GaussianBlur((cv2.dilate(area, np.ones((7, 7), np.uint8)) if cfg.get('fit_lining') else open_).astype(np.float32), (3, 3), 0); handm = None
 if 'held' in cfg:
     hc = cfg['held']; _, rgb, a = pool[names.index(hc['piece'])] if hc.get('piece') in names else pool[0]
     rr, aa = xform(grade(rgb, 1.0), a, hc['len'], hc['ang'], hc.get('flip', False), EL, 1.0)
