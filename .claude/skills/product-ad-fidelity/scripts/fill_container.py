@@ -57,6 +57,15 @@ if cfg.get('fit_lining', False):   # exact inside of the box = the visible cream
     n_, lb_, st_, _ = cv2.connectedComponentsWithStats(lin); lin = (lb_ == 1 + np.argmax(st_[1:, 4])).astype(np.uint8)
     cn_, _ = cv2.findContours(lin, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE); lin = np.zeros_like(lin); cv2.drawContours(lin, cn_, -1, 1, -1)
     area &= lin; cv2.imwrite(os.path.splitext(cfg['out'])[0] + '_fitarea.png', area * 255)
+if cfg.get('opening_from_lining'):   # the whole visible lining = the box opening (as approved in ad 1), minus a band at the back wall
+    area = lin.copy(); ys_, xs_ = np.where(area > 0); bt = cfg.get('back_trim', 0.3)
+    for x in np.unique(xs_):
+        col = ys_[xs_ == x]; cut = col.min() + int((col.max() - col.min()) * bt); area[:cut, x] = 0
+    open_ = lin.copy()
+    if 'len_rim' in cfg: LEN = cfg['len_rim'] * np.sqrt(lin.sum()) / EL * 1.12
+    inner = cv2.erode(area, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(LEN * 0.45) | 1,) * 2)).astype(bool)
+    sc = LEN / 195.0; SHD = (int(-8 * sc), int(11 * sc)); SB = 10 * sc
+    cv2.imwrite(os.path.splitext(cfg['out'])[0] + '_fitarea.png', area * 255)
 fitm = cv2.erode(area, np.ones((cfg.get('edge_margin', 9),) * 2, np.uint8)).astype(bool)          # every piece must lie fully inside
 inner = cv2.erode(area, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(LEN * 0.45) | 1,) * 2)).astype(bool)
 sc = LEN / 195.0; SHD = (int(-8 * sc), int(11 * sc)); SB = 10 * sc
