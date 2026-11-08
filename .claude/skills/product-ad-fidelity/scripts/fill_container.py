@@ -11,7 +11,9 @@ config.json:
  "poly": optional full opening polygon when a corner is off-frame,
  "backt": 0.6,          # 0 = pieces may reach the back rim, 1 = only on the floor. 0.6-0.7 stopped 'climbing the back wall'
  "leftwide": false,     # keep the left edge at the rim while pulling the back in
- "frac": 0.33,          # piece length as a fraction of the box FRONT edge (client: ~1/3 of box width, like the reel)
+ "frac": 0.33,          # piece length as a fraction of the box FRONT edge (old way; prefer len_area)
+ "len_area": 0.66,      # piece length (after elong) = 0.66 * sqrt(floor area) -> SAME size as the approved Beethoven boxes
+ "fit": "floor",        # keep every piece on the floor polygon (no pieces over the wall tops)
  "elong": 1.12, "squash": 0.85,
  "cov": 0.05,           # stop layer-1 when uncovered area < 5% (lower = fuller)
  "l2": 0.30, "l3": 0.10,# extra layers as fraction of layer-1 count (wood on top of wood)
@@ -34,12 +36,20 @@ open_ = np.zeros((H, W), np.uint8); cv2.fillPoly(open_, [np.array(cfg.get('poly'
 WHITE = paper_white(cfg['ref_photo']); LIGHT = scene_light(plate, flo.tolist())
 WARM = np.array(cfg.get('warm', [0.86, 0.97, 1.08]), np.float32)
 grade = lambda rgb, g=1.0: np.clip(rgb / WHITE * LIGHT * cfg.get('expo', 1.0) * g * WARM, 0, 255)
-LEN = np.linalg.norm(rim[2] - rim[3]) * cfg.get('frac', 0.33); EL = cfg.get('elong', 1.12); SQ = cfg.get('squash', 0.85)
+EL = cfg.get('elong', 1.12); SQ = cfg.get('squash', 0.85)
+if 'len_area' in cfg:   # size relative to the visible floor area: consistent across camera angles (approved: 0.66)
+    LEN = cfg['len_area'] * np.sqrt(cv2.contourArea(flo.astype(np.float32))) / EL
+else:
+    LEN = np.linalg.norm(rim[2] - rim[3]) * cfg.get('frac', 0.33)
 BT = cfg.get('backt', 0.0); reg = rim.copy()
 for i in (0, 1):
     reg[i, 1] = rim[i, 1] * (1 - BT) + flo[i, 1] * BT; reg[i, 0] = rim[i, 0] * (1 - BT * 0.3) + flo[i, 0] * BT * 0.3
 if cfg.get('leftwide'): reg[0, 0] = rim[0, 0]
 area = np.zeros((H, W), np.uint8); cv2.fillPoly(area, [reg.astype(np.int32)], 1); area &= open_
+if cfg.get('fit') == 'floor':   # pieces lie on the floor, may lean part-way up the walls, never over the wall tops
+    k = np.array(cfg.get('wall_lean', [0.15, 0.15, 0.45, 0.45]), np.float32)[:, None]   # BL,BR,FR,FL: fraction toward rim
+    fp = flo + (rim - flo) * k
+    area = np.zeros((H, W), np.uint8); cv2.fillPoly(area, [fp.astype(np.int32)], 1); area &= open_
 fitm = cv2.erode(area, np.ones((9, 9), np.uint8)).astype(bool)          # every piece must lie fully inside
 inner = cv2.erode(area, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(LEN * 0.45) | 1,) * 2)).astype(bool)
 sc = LEN / 195.0; SHD = (int(-8 * sc), int(11 * sc)); SB = 10 * sc
