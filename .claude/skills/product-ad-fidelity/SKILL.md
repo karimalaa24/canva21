@@ -34,7 +34,9 @@ A prompt alone can never keep the product identical: every AI generation redraws
 What stays fixed is the **approved pixels**. For Beethoven the four approved ad-1 boxes (4 camera
 angles) are stored in `assets/box_masters/` (`python scripts/box_masters.py sheet out.jpg` to view).
 
-1. Generate/animate the rest of the scene normally, but ask Magnific for the box **open and empty**
+1. Generate/animate the rest of the scene normally, but ask Magnific for the box **open and empty** — always the
+   approved fitted-insert look of ad 1 (taut cream insert, crisp creases, no draped satin; prompt "Empty box =
+   approved fitted insert", Image 2 = the approved ad-1 empty box)
    (prompt "Empty open box for the master heap" in `references/magnific_prompts.md`), with the approved
    box photo as reference so the box itself (green leather, gold clasp, cream lining, B logo) stays the same.
 2. Read the opening corners off a grid (back-left, back-right, front-right, front-left).

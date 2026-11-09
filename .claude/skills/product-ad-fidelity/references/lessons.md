@@ -26,6 +26,7 @@ with the client — don't repeat them.
 | Then: "the rim is wider at the front than at the back". The opening mask (non-green + convex hull) reached the golden highlight on the rim, so wood covered the inner half of the rim band at the front. | Opening = non-green after a 17 px morphological open (removes the thin rim highlight), filled + smoothed, no convex hull; heap tucked under the walls (`--left/--right -0.08 --front -0.1`) so the master's own cut edge never shows; clip feathered σ 1.6. Check with a pixel diff that no rim pixel changed. |
 | Clipping the heap at the rim cut whole pieces in half at the edges ("something sticking out over the edges"). | Never clip a heap to fit: shrink-fit the whole heap inside the opening, then fill the gap with whole loose pieces (`place` ring fill). |
 | "The lining doesn't crumple — it's a manufactured, fixed insert" (AI empty plates had draped satin). | `taut_lining.py` on the empty plate before placing; edges kept calm with few loose pieces. |
+| Local flattening of draped satin was only a patch; client pointed at the ad-1 empty box: "this exactly, always". | Re-edit each empty plate in Magnific with the approved ad-1 empty box as Image 2 (65 cr each); framing stays identical, so quads/tracks still fit. |
 | Pieces climbing the back wall. | Pull the back edge of the allowed area toward the floor (`backt` 0.6-0.7). |
 | One side looked empty after that. | `leftwide` + `leftfill`. |
 | Pieces too small → client asked "a bit longer, small amount". | `elong` 1.12 on the long axis only. |
