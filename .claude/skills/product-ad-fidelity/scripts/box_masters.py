@@ -20,11 +20,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ap = argparse.ArgumentParser(); ap.add_argument('cmd'); ap.add_argument('args', nargs='*')
 ap.add_argument('--lib', default=os.path.join(HERE, '..', 'assets', 'box_masters'))
 ap.add_argument('--master'); ap.add_argument('--relight', type=float, default=0.5); ap.add_argument('--edge', type=int, default=5)
-ap.add_argument('--left', type=float, default=-0.04, help='gap kept at the left wall (fraction of width; negative = under the wall)')
-ap.add_argument('--right', type=float, default=-0.04)
+ap.add_argument('--left', type=float, default=-0.08, help='gap kept at the left wall (fraction of width; negative = under the wall)')
+ap.add_argument('--right', type=float, default=-0.08)
 ap.add_argument('--mirror', action='store_true')
-ap.add_argument('--wall_px', type=int, default=14, help='even lining strip kept between wood and the walls (px at plate size)')
-ap.add_argument('--front', type=float, default=-0.04)
+ap.add_argument('--wall_px', type=int, default=8, help='even lining strip kept between wood and the walls (px at plate size)')
+ap.add_argument('--front', type=float, default=-0.1)
 ap.add_argument('--back', type=float, default=0.1, help='empty band left at the back of the new box (fraction of depth)')
 A = ap.parse_args(); os.makedirs(A.lib, exist_ok=True); META = os.path.join(A.lib, 'masters.json')
 meta = json.load(open(META)) if os.path.exists(META) else {}
@@ -98,19 +98,25 @@ elif A.cmd == 'place':
     qm = np.zeros((H, W), np.uint8); cv2.fillPoly(qm, [dq.astype(np.int32)], 1)
     # the real opening = the light, non-green inside of the EMPTY plate. A hand-read quad that runs a few px over
     # a wall top made the wall look "bent inward" under the wood (client, ad 2 front-left corner) -> never cover green.
+    # the real opening = the CREAM lining of the EMPTY plate only. Not "non-green": the rim's top band carries a golden
+    # highlight, and a mask/convex hull that reached it let the wood cover the rim band at the front, so the rim looked
+    # wider in front than at the back (client, ad 2). Cream = bright, neutral-warm; holes (satin shadows) filled.
     lab = cv2.cvtColor(D.astype(np.uint8), cv2.COLOR_BGR2LAB).astype(np.int16)
-    opn = ((lab[..., 1] >= 124) & (lab[..., 0] > 60)).astype(np.uint8) & cv2.dilate(qm, np.ones((41, 41), np.uint8))
-    opn = cv2.morphologyEx(opn, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    opn = ((lab[..., 1] >= 124) & (lab[..., 0] > 60)).astype(np.uint8)            # lining + inner walls (not green leather)
+    opn &= cv2.dilate(qm, np.ones((41, 41), np.uint8))
+    opn = cv2.morphologyEx(opn, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17)))   # drops the thin rim highlight
     n_, lb_, st_, _ = cv2.connectedComponentsWithStats(opn)
     if n_ > 1:
-        opn = (lb_ == 1 + np.argmax(st_[1:, 4])).astype(np.uint8); cn_, _ = cv2.findContours(opn, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
-        opn = np.zeros_like(opn); cv2.fillConvexPoly(opn, cv2.convexHull(max(cn_, key=cv2.contourArea)), 1);   # straight along the walls
+        opn = (lb_ == 1 + np.argmax(st_[1:, 4])).astype(np.uint8)
+        opn = cv2.morphologyEx(opn, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25)))
+        cn_, _ = cv2.findContours(opn, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE); opn = np.zeros_like(opn); cv2.drawContours(opn, cn_, -1, 1, -1)
+        opn = (cv2.GaussianBlur(opn.astype(np.float32), (0, 0), 4) > 0.5).astype(np.uint8)      # smooth, straight edges
         qm = cv2.dilate(qm, np.ones((15, 15), np.uint8)) & opn
     qm = cv2.erode(qm, np.ones((A.edge, A.edge), np.uint8))
     if A.wall_px > 0:   # thin even strip of lining between wood and every wall: the wall's top edge stays crisp against
         # cream all the way round (wood touching the dark rim made the front-left "look bent", client ad 2)
         qm = cv2.erode(qm, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * A.wall_px + 1,) * 2))
-    al = (wa * cv2.GaussianBlur(qm.astype(np.float32), (3, 3), 0))[..., None]   # never outside the opening
+    al = (wa * cv2.GaussianBlur(qm.astype(np.float32), (0, 0), 1.6))[..., None]   # never outside the opening
     cv2.imwrite(op, np.clip(D * (1 - al) + wF * al, 0, 255).astype(np.uint8)); print('wrote', op)
 
 elif A.cmd == 'sheet':
