@@ -25,7 +25,7 @@ G=[ # start,end,layout,[line1 words],[line2 words]   -- timed on the new voice (
  (25.11,26.60,'pk',[('والشحن',25.11)],[('مجاناً',25.53)]),
  (26.78,99,'s9',[('ومتوفر',26.78),('الدفع',27.27)],[('عن',27.57),('طريق',27.70),('تابي',27.97),('وتمارا',28.37)]),
 ]
-GIFT_T=23.42; GIFT_END=25.08
+GIFT_T=999; GIFT_END=999   # card in the lid instead of the pop-up badge
 PUN='!.…'
 def split_p(word):
     core=word.rstrip(PUN); return core,word[len(core):]
