@@ -46,6 +46,12 @@ angles) are stored in `assets/box_masters/` (`python scripts/box_masters.py shee
    rim hid the wall edge and the client saw the box "bent" — the box edges must look exactly like the empty box.
    The angle pick is only a starting point: also render every master (`--master NAME`) into the box,
    put them in one grid and pick by eye (ad 2: `beethoven_09` gave the clearest, most ad-1-like pieces in all boxes).
+   Since ad 2 `place` does it in this order, all automatic: (a) find the real opening of the empty plate (rim band
+   and its highlight excluded) with a thin even lining strip at every wall; (b) shrink-fit the approved heap's
+   own outline inside it, pulling in only the side that would cross a rim, until no wood is over any rim;
+   (c) fill the band between heap and walls with WHOLE real pieces (`assets/box_masters/pieces`, same colour
+   model), each fully inside the opening, mostly lying in the gap with only its end on the heap.
+   Verify: 0 changed pixels on the green leather (rim/walls) versus the empty plate.
 4. Show the still before any Kling credit. If the client approves a new box, register it:
    `box_masters.py add NAME filled.png empty.png "quad"` so the library grows with every ad.
 Never use one heap for every box (ad 2: the close high-angle heap squeezed into small low-angle boxes
