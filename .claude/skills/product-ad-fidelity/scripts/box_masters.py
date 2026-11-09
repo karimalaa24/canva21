@@ -20,6 +20,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ap = argparse.ArgumentParser(); ap.add_argument('cmd'); ap.add_argument('args', nargs='*')
 ap.add_argument('--lib', default=os.path.join(HERE, '..', 'assets', 'box_masters'))
 ap.add_argument('--master'); ap.add_argument('--relight', type=float, default=0.5); ap.add_argument('--edge', type=int, default=5)
+ap.add_argument('--tuck', type=float, default=0.12, help='how far the heap reaches under the front/side walls')
 ap.add_argument('--back', type=float, default=0.1, help='empty band left at the back of the new box (fraction of depth)')
 A = ap.parse_args(); os.makedirs(A.lib, exist_ok=True); META = os.path.join(A.lib, 'masters.json')
 meta = json.load(open(META)) if os.path.exists(META) else {}
@@ -78,6 +79,10 @@ elif A.cmd == 'place':
     print('masters by angle match:', ', '.join(ranked), '-> using', name)
     src = cv2.imread(os.path.join(A.lib, name + '.png'), cv2.IMREAD_UNCHANGED).astype(np.float32)
     tq = dq.copy(); tq[0] = dq[0] + (dq[3] - dq[0]) * A.back; tq[1] = dq[1] + (dq[2] - dq[1]) * A.back
+    # tuck the heap slightly under the front and side walls (clipped below), so no bare satin / cut-off
+    # piece shows in the front corners (client: "something stuck on / sticking out" at the front-left corner)
+    c = tq.mean(0); tq = c + (tq - c) * (1 + A.tuck)   # grow front + sides; back corners are reset below
+    tq[0] = dq[0] + (dq[3] - dq[0]) * A.back + (dq[0] - dq[1]) * A.tuck / 2; tq[1] = dq[1] + (dq[2] - dq[1]) * A.back + (dq[1] - dq[0]) * A.tuck / 2
     Hm = cv2.getPerspectiveTransform(np.array(m.get('heap_quad', m['quad']), np.float32), tq)   # heap footprint -> new opening
     wF = cv2.warpPerspective(src[..., :3], Hm, (W, H), flags=cv2.INTER_CUBIC)
     wa = cv2.warpPerspective(src[..., 3] / 255, Hm, (W, H), flags=cv2.INTER_LINEAR)
