@@ -52,6 +52,10 @@ angles) are stored in `assets/box_masters/` (`python scripts/box_masters.py shee
    (c) fill the band between heap and walls with WHOLE real pieces (`assets/box_masters/pieces`, same colour
    model), each fully inside the opening, mostly lying in the gap with only its end on the heap.
    Verify: 0 changed pixels on the green leather (rim/walls) versus the empty plate.
+   Before placing: the lining is a fitted, manufactured insert — never wrinkled/draped satin. If the AI plate
+   draped it, `scripts/taut_lining.py plate.png out.png "[[BL],[BR],[FR],[FL]]"` (floor corners) replaces the
+   floor by smooth fitted shading, never touching the rim. Edges may stay calm (few ring pieces, `--max_ring 8`);
+   a piece partly hidden by a wall is fine, a piece that looks CUT is not (fit loop stops at <= 5 px over a rim).
 4. Show the still before any Kling credit. If the client approves a new box, register it:
    `box_masters.py add NAME filled.png empty.png "quad"` so the library grows with every ad.
 Never use one heap for every box (ad 2: the close high-angle heap squeezed into small low-angle boxes
@@ -133,6 +137,7 @@ the working branch, push, send the final video, list the timeline and the credit
 - `scripts/common.py` – piece loading, grading, shadowed placement, target colour mapping
 - `scripts/extract_pieces.py`, `measure_target_color.py`, `scatter_on_surface.py`, `fill_container.py`,
   `match_piece_color.py`, `align_segments.py`, `assemble.sh`, `build_titles.py`, `make_badges.py`, `qc.py`
+- `scripts/taut_lining.py` – make a wrinkled satin floor a taut fitted lining (free, local)
 - `scripts/box_masters.py` – approved-box library: add / place (nearest camera angle) / sheet
 - `assets/box_masters/` – approved Beethoven heaps (ad 1, 4 angles) + `masters.json`
 - `assets/almarai-*.woff` – caption font (Arabic 800 + Latin for ! . …)

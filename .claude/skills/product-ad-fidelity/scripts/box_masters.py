@@ -27,7 +27,7 @@ ap.add_argument('--ring', type=int, default=1, help='fill the band between heap 
 ap.add_argument('--piece', type=float, default=0.27, help='ring piece length / box front width (ad 1: ~1/3)')
 ap.add_argument('--depth_ratio', type=float, default=0.85, help='box depth / width (real proportions)')
 ap.add_argument('--seed', type=int, default=3)
-ap.add_argument('--max_ring', type=int, default=24)
+ap.add_argument('--max_ring', type=int, default=8)
 ap.add_argument('--max_overlap', type=float, default=0.55)
 ap.add_argument('--wall_px', type=int, default=8, help='even lining strip kept between wood and the walls (px at plate size)')
 ap.add_argument('--front', type=float, default=0.0)
@@ -119,12 +119,12 @@ elif A.cmd == 'place':
     P = lambda u, v: (1 - v) * ((1 - u) * dq[0] + u * dq[1]) + v * ((1 - u) * dq[3] + u * dq[2])
     Hd = cv2.getPerspectiveTransform(dq, np.float32([[0, 0], [1, 0], [1, 1], [0, 1]]))
     mg = {'l': A.left, 'r': A.right, 'f': A.front, 'b': A.back}
-    for it in range(80):
+    for it in range(160):
         tq = np.array([P(mg['l'], mg['b']), P(1 - mg['r'], mg['b']), P(1 - mg['r'], 1 - mg['f']), P(mg['l'], 1 - mg['f'])], np.float32)
         Hm = cv2.getPerspectiveTransform(sq, tq)
         wa = cv2.warpPerspective(src[..., 3] / 255, Hm, (W, H), flags=cv2.INTER_LINEAR)
         out = (wa > 0.35) & (qm == 0); n_out = int(out.sum())
-        if n_out <= max(30, 0.0005 * (wa > 0.35).sum()): break
+        if n_out <= 5: break
         oy, ox = np.where(out); uv = cv2.perspectiveTransform(np.c_[ox, oy].astype(np.float32)[None], Hd)[0]
         uu, vv = uv[:, 0], uv[:, 1]; k = 0.006
         if (uu < 0.25).sum() > 10: mg['l'] += k
