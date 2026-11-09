@@ -4,7 +4,7 @@ SRC='ed/clean3b.mp4'; OUT='ed/clean3c.mp4'
 ref=cv2.imread('ref_pkg.png').astype(np.float32)
 # card in the link frame (inner quad), TL,TR,BR,BL
 cq=np.float32([[395,722],[527,752],[497,990],[347,977]])
-dq=np.float32([[121,668],[214,659],[209,838],[116,847]])   # in our frame KREF of the scene
+dq=np.float32([[420,485],[541,528],[510,788],[368,767]])   # in our frame KREF of the scene
 cw,ch=140,260; flat=np.float32([[0,0],[cw,0],[cw,ch],[0,ch]])
 card=cv2.warpPerspective(ref,cv2.getPerspectiveTransform(cq,flat),(cw,ch),flags=cv2.INTER_CUBIC)
 cm=np.ones((ch,cw),np.float32); cm=cv2.erode(cm,np.ones((3,3),np.uint8))
@@ -33,7 +33,7 @@ for k in range(len(G)):
     lay=cv2.warpPerspective(card,M,(W,H),flags=cv2.INTER_CUBIC); a=cv2.warpPerspective(cm,M,(W,H))
     a=cv2.GaussianBlur(a,(0,0),0.8)
     # soft shadow of the card on the lining (light from upper right)
-    sh=cv2.GaussianBlur(np.roll(np.roll(a,9,1),5,0),(0,0),9)*0.45*(1-a)
+    sh=cv2.GaussianBlur(np.roll(np.roll(a,-9,1),6,0),(0,0),9)*0.45*(1-a)
     f*=(1-sh)[...,None]
     # local light: lining brightness around the card -> card exposure
     f=f*(1-a[...,None])+lay*a[...,None]*1.0
