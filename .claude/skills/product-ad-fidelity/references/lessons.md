@@ -27,6 +27,8 @@ with the client — don't repeat them.
 | Clipping the heap at the rim cut whole pieces in half at the edges ("something sticking out over the edges"). | Never clip a heap to fit: shrink-fit the whole heap inside the opening, then fill the gap with whole loose pieces (`place` ring fill). |
 | "The lining doesn't crumple — it's a manufactured, fixed insert" (AI empty plates had draped satin). | `taut_lining.py` on the empty plate before placing; edges kept calm with few loose pieces. |
 | Local flattening of draped satin was only a patch; client pointed at the ad-1 empty box: "this exactly, always". | Re-edit each empty plate in Magnific with the approved ad-1 empty box as Image 2 (65 cr each); framing stays identical, so quads/tracks still fit. |
+| Needed a wider shot (room for a prop in front) of an approved close shot: `images_expand` returned a broken low-res page with text. | Local canvas: shrink the approved frame to ~0.78, blurred reflected border, nano-banana edit "replace the blurred border with real scene + add the prop", then paste the original box/oud back (homography) before Kling. |
+| Burned-in captions in a client's clip. | Search the Magnific project for the clean Kling clip of that scene (`creations_search` by prop keyword) instead of inpainting text out. |
 | Pieces climbing the back wall. | Pull the back edge of the allowed area toward the floor (`backt` 0.6-0.7). |
 | One side looked empty after that. | `leftwide` + `leftfill`. |
 | Pieces too small → client asked "a bit longer, small amount". | `elong` 1.12 on the long axis only. |
