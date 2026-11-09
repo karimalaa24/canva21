@@ -20,8 +20,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ap = argparse.ArgumentParser(); ap.add_argument('cmd'); ap.add_argument('args', nargs='*')
 ap.add_argument('--lib', default=os.path.join(HERE, '..', 'assets', 'box_masters'))
 ap.add_argument('--master'); ap.add_argument('--relight', type=float, default=0.5); ap.add_argument('--edge', type=int, default=5)
-ap.add_argument('--left', type=float, default=0.08, help='gap kept at the left wall (fraction of width; negative = under the wall)')
+ap.add_argument('--left', type=float, default=-0.04, help='gap kept at the left wall (fraction of width; negative = under the wall)')
 ap.add_argument('--right', type=float, default=-0.04)
+ap.add_argument('--mirror', action='store_true')
+ap.add_argument('--wall_px', type=int, default=14, help='even lining strip kept between wood and the walls (px at plate size)')
 ap.add_argument('--front', type=float, default=-0.04)
 ap.add_argument('--back', type=float, default=0.1, help='empty band left at the back of the new box (fraction of depth)')
 A = ap.parse_args(); os.makedirs(A.lib, exist_ok=True); META = os.path.join(A.lib, 'masters.json')
@@ -86,7 +88,10 @@ elif A.cmd == 'place':
     l, r, f = A.left, A.right, A.front
     P = lambda u, v: (1 - v) * ((1 - u) * dq[0] + u * dq[1]) + v * ((1 - u) * dq[3] + u * dq[2])
     tq = np.array([P(l, A.back), P(1 - r, A.back), P(1 - r, 1 - f), P(l, 1 - f)], np.float32)
-    Hm = cv2.getPerspectiveTransform(np.array(m.get('heap_quad', m['quad']), np.float32), tq)   # heap footprint -> new opening
+    hq = np.array(m.get('heap_quad', m['quad']), np.float32)
+    if A.mirror:   # same approved heap, left-right flipped (moves a piece lying along one wall to the other side)
+        src = src[:, ::-1].copy(); hq[:, 0] = src.shape[1] - 1 - hq[:, 0]; hq = hq[[1, 0, 3, 2]]
+    Hm = cv2.getPerspectiveTransform(hq, tq)
     wF = cv2.warpPerspective(src[..., :3], Hm, (W, H), flags=cv2.INTER_CUBIC)
     wa = cv2.warpPerspective(src[..., 3] / 255, Hm, (W, H), flags=cv2.INTER_LINEAR)
     wF *= (lining_median(D, dq) / np.array(m['lining'], np.float32)) ** A.relight   # match the new scene light
@@ -102,6 +107,9 @@ elif A.cmd == 'place':
         opn = np.zeros_like(opn); cv2.fillConvexPoly(opn, cv2.convexHull(max(cn_, key=cv2.contourArea)), 1);   # straight along the walls
         qm = cv2.dilate(qm, np.ones((15, 15), np.uint8)) & opn
     qm = cv2.erode(qm, np.ones((A.edge, A.edge), np.uint8))
+    if A.wall_px > 0:   # thin even strip of lining between wood and every wall: the wall's top edge stays crisp against
+        # cream all the way round (wood touching the dark rim made the front-left "look bent", client ad 2)
+        qm = cv2.erode(qm, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * A.wall_px + 1,) * 2))
     al = (wa * cv2.GaussianBlur(qm.astype(np.float32), (3, 3), 0))[..., None]   # never outside the opening
     cv2.imwrite(op, np.clip(D * (1 - al) + wF * al, 0, 255).astype(np.uint8)); print('wrote', op)
 

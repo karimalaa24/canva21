@@ -22,6 +22,7 @@ with the client — don't repeat them.
 | Pieces cut at the box edge / sticking out. | Every piece must fit fully inside an eroded opening mask (`fits()`); edges slightly emptier. |
 | Ad 2: the same approved heap transplanted into every box, whatever the angle → small low-angle boxes looked flat and crowded; client: "ad 1's distribution is better". | `box_masters.py`: library of approved heaps from several angles, nearest angle wins, heap footprint mapped to the new opening. |
 | Ad 2 box library: heap clipped to a hand-read quad that ran a few px over the left wall top → client: "the front-left of the box looks bent inward". | `place` clips to the convex hull of the plate's own light (non-green) opening: the wood stops exactly at the wall line, walls stay untouched. |
+| Still "bent" after that; a wedge-shaped gap at the left wall ("looks empty") was rejected too. Cause: dark wood touching the dark rim hides the wall's top edge near the front, while at the back the edge shows against cream. | `--wall_px 14` (default): an even, thin lining strip between wood and every wall all the way round; heap stays full, walls read exactly like the empty box. |
 | Pieces climbing the back wall. | Pull the back edge of the allowed area toward the floor (`backt` 0.6-0.7). |
 | One side looked empty after that. | `leftwide` + `leftfill`. |
 | Pieces too small → client asked "a bit longer, small amount". | `elong` 1.12 on the long axis only. |
