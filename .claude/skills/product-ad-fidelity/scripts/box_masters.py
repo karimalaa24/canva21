@@ -88,6 +88,16 @@ elif A.cmd == 'place':
     wa = cv2.warpPerspective(src[..., 3] / 255, Hm, (W, H), flags=cv2.INTER_LINEAR)
     wF *= (lining_median(D, dq) / np.array(m['lining'], np.float32)) ** A.relight   # match the new scene light
     qm = np.zeros((H, W), np.uint8); cv2.fillPoly(qm, [dq.astype(np.int32)], 1)
+    # the real opening = the light, non-green inside of the EMPTY plate. A hand-read quad that runs a few px over
+    # a wall top made the wall look "bent inward" under the wood (client, ad 2 front-left corner) -> never cover green.
+    lab = cv2.cvtColor(D.astype(np.uint8), cv2.COLOR_BGR2LAB).astype(np.int16)
+    opn = ((lab[..., 1] >= 124) & (lab[..., 0] > 60)).astype(np.uint8) & cv2.dilate(qm, np.ones((41, 41), np.uint8))
+    opn = cv2.morphologyEx(opn, cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    n_, lb_, st_, _ = cv2.connectedComponentsWithStats(opn)
+    if n_ > 1:
+        opn = (lb_ == 1 + np.argmax(st_[1:, 4])).astype(np.uint8); cn_, _ = cv2.findContours(opn, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        opn = np.zeros_like(opn); cv2.fillConvexPoly(opn, cv2.convexHull(max(cn_, key=cv2.contourArea)), 1);   # straight along the walls
+        qm = cv2.dilate(qm, np.ones((15, 15), np.uint8)) & opn
     qm = cv2.erode(qm, np.ones((A.edge, A.edge), np.uint8))
     al = (wa * cv2.GaussianBlur(qm.astype(np.float32), (3, 3), 0))[..., None]   # never outside the opening
     cv2.imwrite(op, np.clip(D * (1 - al) + wF * al, 0, 255).astype(np.uint8)); print('wrote', op)
