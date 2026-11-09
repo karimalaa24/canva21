@@ -42,6 +42,8 @@ angles) are stored in `assets/box_masters/` (`python scripts/box_masters.py shee
    picks the approved heap whose camera angle is closest, maps the heap's own footprint into the new
    opening (`--back 0.1` leaves the small empty band at the back, as approved), relights it to the
    new scene and clips it inside the opening. `--master NAME` forces one; `--edge` px keeps it off the rim.
+   The angle pick is only a starting point: also render every master (`--master NAME`) into the box,
+   put them in one grid and pick by eye (ad 2: `beethoven_09` gave the clearest, most ad-1-like pieces in all boxes).
 4. Show the still before any Kling credit. If the client approves a new box, register it:
    `box_masters.py add NAME filled.png empty.png "quad"` so the library grows with every ad.
 Never use one heap for every box (ad 2: the close high-angle heap squeezed into small low-angle boxes
