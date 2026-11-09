@@ -28,6 +28,25 @@ and camera/hand motion.
 4. **Report honestly**: what still differs, what each step cost, what you threw away.
 5. Reply in the client's language/dialect; keep technical detail out of the message.
 
+## Repeat client: lock the product look and box arrangement (do this FIRST on ad 2, 3, ...)
+
+A prompt alone can never keep the product identical: every AI generation redraws the pieces.
+What stays fixed is the **approved pixels**. For Beethoven the four approved ad-1 boxes (4 camera
+angles) are stored in `assets/box_masters/` (`python scripts/box_masters.py sheet out.jpg` to view).
+
+1. Generate/animate the rest of the scene normally, but ask Magnific for the box **open and empty**
+   (prompt "Empty open box for the master heap" in `references/magnific_prompts.md`), with the approved
+   box photo as reference so the box itself (green leather, gold clasp, cream lining, B logo) stays the same.
+2. Read the opening corners off a grid (back-left, back-right, front-right, front-left).
+3. `python scripts/box_masters.py place empty.png filled.png "BLx,BLy BRx,BRy FRx,FRy FLx,FLy"` —
+   picks the approved heap whose camera angle is closest, maps the heap's own footprint into the new
+   opening (`--back 0.1` leaves the small empty band at the back, as approved), relights it to the
+   new scene and clips it inside the opening. `--master NAME` forces one; `--edge` px keeps it off the rim.
+4. Show the still before any Kling credit. If the client approves a new box, register it:
+   `box_masters.py add NAME filled.png empty.png "quad"` so the library grows with every ad.
+Never use one heap for every box (ad 2: the close high-angle heap squeezed into small low-angle boxes
+looked flat and crowded — "ad 1's distribution is better").
+
 ## Workflow
 
 ### 1. Inventory
@@ -104,6 +123,8 @@ the working branch, push, send the final video, list the timeline and the credit
 - `scripts/common.py` – piece loading, grading, shadowed placement, target colour mapping
 - `scripts/extract_pieces.py`, `measure_target_color.py`, `scatter_on_surface.py`, `fill_container.py`,
   `match_piece_color.py`, `align_segments.py`, `assemble.sh`, `build_titles.py`, `make_badges.py`, `qc.py`
+- `scripts/box_masters.py` – approved-box library: add / place (nearest camera angle) / sheet
+- `assets/box_masters/` – approved Beethoven heaps (ad 1, 4 angles) + `masters.json`
 - `assets/almarai-*.woff` – caption font (Arabic 800 + Latin for ! . …)
 - `references/lessons.md` – every failure and its fix (read first)
 - `references/magnific_prompts.md` – the exact prompts that worked

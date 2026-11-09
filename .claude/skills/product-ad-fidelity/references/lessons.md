@@ -20,6 +20,7 @@ with the client — don't repeat them.
 | AI "reference-guided fill" using a real reel screenshot: right arrangement, wrong colour (different from all other scenes). | Use the same cut-outs + same colour pipeline in every scene; use reels only as *arrangement* reference. |
 | First composite: too dense, pasted look, then too sparse, then "spread flat". | Final recipe: full box, 3 layers (wood on wood), small natural gaps, gaps enclosed by wood darkened as shadow, open edges keep the floor. |
 | Pieces cut at the box edge / sticking out. | Every piece must fit fully inside an eroded opening mask (`fits()`); edges slightly emptier. |
+| Ad 2: the same approved heap transplanted into every box, whatever the angle → small low-angle boxes looked flat and crowded; client: "ad 1's distribution is better". | `box_masters.py`: library of approved heaps from several angles, nearest angle wins, heap footprint mapped to the new opening. |
 | Pieces climbing the back wall. | Pull the back edge of the allowed area toward the floor (`backt` 0.6-0.7). |
 | One side looked empty after that. | `leftwide` + `leftfill`. |
 | Pieces too small → client asked "a bit longer, small amount". | `elong` 1.12 on the long axis only. |
