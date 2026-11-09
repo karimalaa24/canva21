@@ -56,3 +56,14 @@ with the client — don't repeat them.
 | Kling clips have slight luminance flicker. | `deflicker=size=9:mode=pm` per clip before assembly. |
 | Arabic subset font has no `!`/`…` → boxes. | Draw punctuation with the latin subset of the same font. |
 | Long caption line ran off the frame (also in the original). | Auto-shrink lines wider than 950 px. |
+
+## Edit, voice, captions (ads 2-3)
+| Failure | Fix |
+|---|---|
+| Long scene: two clips / Kling camera move didn't match. | Locked Kling clip + local hold-and-zoom (`fx/hold_zoom.py`), zoom made stronger for free. |
+| Long-scene "light" as bloom, sweeps, star glints: "not this at all". | One soft sun shaft that drifts over part of the scene and fades (`fx/sun_ray.py`). |
+| Laser outline drifted (global affine, parallax) and missed box edges. | Hand-traced box polygons + per-box optical-flow tracks; occluded box masked. |
+| Card glow covered the logo. | Halo only outside the card polygon. |
+| "Sentences too fast". | `pace_voice.py insert` 0.3-0.4 s at sentence ends, scenes stretched to match, captions stay through pauses. |
+| Gift badge floating mid-frame. | Card glued in the lid, upper right, leaning on the right wall, tracked; glow on "هدية سرية". |
+| Captions landed on the burner. | Move that caption group to the top zone. |
