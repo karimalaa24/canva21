@@ -27,6 +27,10 @@ and camera/hand motion.
 3. **One scene first** (the worst one), get approval on look/size/colour, then roll out.
 4. **Report honestly**: what still differs, what each step cost, what you threw away.
 5. Reply in the client's language/dialect; keep technical detail out of the message.
+6. **Every scene is generated ONCE — no re-rolls.** The client does not pay for a second take of any scene.
+   So all checking happens on the free still before the paid call: final approved still, exact duration
+   (scene length + 0.5 s), the proven prompt + negative prompt for that shot type, `generate 2 and pick` is
+   NOT allowed. If a result has a small flaw, fix it locally (stabilise, retime, mask, re-track) — never re-generate.
 
 ## Repeat client: lock the product look and box arrangement (do this FIRST on ad 2, 3, ...)
 

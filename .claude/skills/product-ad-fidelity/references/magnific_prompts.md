@@ -30,7 +30,7 @@ negative: `lifting up, pulling away, piece rotating, piece turning sideways, pie
 
 ## Kling — hand moves a piece (overhead tray)
 > Natural overhead footage of an oud merchant's hands selecting agarwood on an engraved brass tray. The right hand slowly lowers the wood piece it holds and places it on the white cloth next to the other three, adjusting it slightly with a fingertip before letting go. The left hand rests on the tray edge with small natural breathing movements. Smooth, slow, realistic human movement with weight and gentle easing … Every wood piece keeps exactly the same dark brown-grey colour, pattern, size and shape as in the start frame; the piece in the hand is exactly the same colour as the pieces on the tray and cloth throughout. Untouched pieces do not move … No ring, no jewellery …
-Generate 2 (5 s), keep the one where the moved piece keeps its size; cut the 1.9 s window of the actual move.
+Generate ONCE (5 s; client rule: no re-rolls) with start = approved still; cut the 1.9 s window of the actual move.
 
 ## Empty open box for the master heap (any new scene with the box) — refs: approved box still + scene idea
 > Image 2 is the exact box to use: dark green textured leather box, gold rectangular clasp in the middle of the front, lid open upright, ivory satin lid lining with the gold B monogram, the word Beethoven and the Arabic lettering exactly as in Image 2, cream satin inner tray. The box is OPEN and EMPTY: the clean cream satin inner tray is fully visible, nothing inside it. Same box proportions, colours and details as Image 2. <scene description: table, light, other objects>. Add nothing inside the box.

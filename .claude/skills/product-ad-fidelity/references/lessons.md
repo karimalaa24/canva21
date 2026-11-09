@@ -49,7 +49,7 @@ with the client — don't repeat them.
 | Failure | Fix |
 |---|---|
 | Local ffmpeg zoom-in on the still: "not nice at all". | Kling 3.0 for every animated shot. |
-| Kling hand shot with a big move (piece placed on cloth) — chosen version had piece size stable; the other grew. | Generate 2, pick by checking piece size over time. |
+| Kling hand shot with a big move (piece placed on cloth) — chosen version had piece size stable; the other grew. | (ad 1 only) Generated 2 and picked. Client rule since ad 2: every scene is generated ONCE — make the still and prompt right first, fix small flaws locally. |
 | Captions lifted from the old render by differencing: ghost box edges/reflections ("mirror"), flickering dark band, specks when text faded, missing words at cross-fades. | Build a caption-free edit, re-type all captions (`build_titles.py`). |
 | Kling clips have slight luminance flicker. | `deflicker=size=9:mode=pm` per clip before assembly. |
 | Arabic subset font has no `!`/`…` → boxes. | Draw punctuation with the latin subset of the same font. |
