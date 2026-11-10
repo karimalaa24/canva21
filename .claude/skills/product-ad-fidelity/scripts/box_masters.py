@@ -23,6 +23,7 @@ ap.add_argument('--master'); ap.add_argument('--relight', type=float, default=0.
 ap.add_argument('--left', type=float, default=0.0, help='starting margin at the left wall (fraction of width); the fit only pulls in')
 ap.add_argument('--right', type=float, default=0.0)
 ap.add_argument('--mirror', action='store_true')
+ap.add_argument('--front_hide', action='store_true', help='fill up to the front rim; wood may continue hidden behind the front wall')
 ap.add_argument('--ring', type=int, default=1, help='fill the band between heap and walls with whole pieces')
 ap.add_argument('--piece', type=float, default=0.27, help='ring piece length / box front width (ad 1: ~1/3)')
 ap.add_argument('--depth_ratio', type=float, default=0.85, help='box depth / width (real proportions)')
@@ -101,7 +102,7 @@ elif A.cmd == 'place':
         cn_, _ = cv2.findContours(opn, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE); opn = np.zeros_like(opn); cv2.drawContours(opn, cn_, -1, 1, -1)
         opn = (cv2.GaussianBlur(opn.astype(np.float32), (0, 0), 4) > 0.5).astype(np.uint8)      # smooth, straight edges
         qm = cv2.dilate(qm, np.ones((15, 15), np.uint8)) & opn
-    qm = cv2.erode(qm, np.ones((A.edge, A.edge), np.uint8))
+    qm = cv2.erode(qm, np.ones((A.edge, A.edge), np.uint8)); qm0 = qm.copy()
     if A.wall_px > 0:   # thin even lining strip between wood and every wall: rim edges stay crisp, same as the empty box
         qm = cv2.erode(qm, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * A.wall_px + 1,) * 2))
     # the master's outermost few px hold the dark contact-shadow seam of its old (ad-1) rim cut: trim them
@@ -119,23 +120,31 @@ elif A.cmd == 'place':
     P = lambda u, v: (1 - v) * ((1 - u) * dq[0] + u * dq[1]) + v * ((1 - u) * dq[3] + u * dq[2])
     Hd = cv2.getPerspectiveTransform(dq, np.float32([[0, 0], [1, 0], [1, 1], [0, 1]]))
     mg = {'l': A.left, 'r': A.right, 'f': A.front, 'b': A.back}
+    qm_fit, qm_clip = qm, qm
+    if A.front_hide:   # client ad 4: "fill up to the front rim; pieces may go hidden behind the front wall, no white gap"
+        yy_, xx_ = np.mgrid[0:H, 0:W]; uvg = cv2.perspectiveTransform(np.c_[xx_.ravel(), yy_.ravel()].astype(np.float32)[None], Hd)[0]
+        U, V = uvg[:, 0].reshape(H, W), uvg[:, 1].reshape(H, W)
+        fz = ((V > 0.55) & (U > 0.0) & (U < 1.0)).astype(np.uint8)          # front half + everything behind the front wall
+        qm_fit = qm | fz                                                      # crossing the front rim is allowed (it hides)
+        qm_clip = qm | (qm0 & (V > 0.6)).astype(np.uint8)                     # front: wood right up to the rim, sides keep the strip
+        mg['f'] = min(mg['f'], -0.14)
     for it in range(160):
         tq = np.array([P(mg['l'], mg['b']), P(1 - mg['r'], mg['b']), P(1 - mg['r'], 1 - mg['f']), P(mg['l'], 1 - mg['f'])], np.float32)
         Hm = cv2.getPerspectiveTransform(sq, tq)
         wa = cv2.warpPerspective(src[..., 3] / 255, Hm, (W, H), flags=cv2.INTER_LINEAR)
-        out = (wa > 0.35) & (qm == 0); n_out = int(out.sum())
+        out = (wa > 0.35) & (qm_fit == 0); n_out = int(out.sum())
         if n_out <= 5: break
         oy, ox = np.where(out); uv = cv2.perspectiveTransform(np.c_[ox, oy].astype(np.float32)[None], Hd)[0]
         uu, vv = uv[:, 0], uv[:, 1]; k = 0.006
         if (uu < 0.25).sum() > 10: mg['l'] += k
         if (uu > 0.75).sum() > 10: mg['r'] += k
-        if (vv > 0.7).sum() > 10: mg['f'] += k
+        if (vv > 0.7).sum() > 10 and not A.front_hide: mg['f'] += k
         if (vv < 0.3).sum() > 10: mg['b'] += k
     print('fit: margins l %.3f r %.3f front %.3f back %.3f, wood px over a rim: %d' % (mg['l'], mg['r'], mg['f'], mg['b'], n_out))
     wF = cv2.warpPerspective(src[..., :3], Hm, (W, H), flags=cv2.INTER_CUBIC)
     wF *= (lining_median(D, dq) / np.array(m['lining'], np.float32)) ** A.relight   # match the new scene light
     wa = np.clip((wa - 0.3) / 0.45, 0, 1)    # drop the faint dark seam the master kept along its old (ad-1) rim cut
-    al = (wa * cv2.GaussianBlur(qm.astype(np.float32), (0, 0), 1.6))[..., None]   # safety clip (should cut ~nothing now)
+    al = (wa * cv2.GaussianBlur(qm_clip.astype(np.float32), (0, 0), 1.6))[..., None]   # safety clip (front: hides behind the wall)
     out = D * (1 - al) + wF * al
     # 4) ring fill: the band between the whole heap and the walls gets WHOLE real pieces (same cut-outs, same colour
     #    model as ad 1), laid over the heap's edge -> the box looks full, the heap edge looks natural, and no piece is
@@ -145,7 +154,7 @@ elif A.cmd == 'place':
         import random, sys
         sys.path.insert(0, HERE); from common import load_pieces, xform, Canvas, load_target, apply_target_colour
         rng = random.Random(A.seed); pool = load_pieces(pdir); kit = json.load(open(os.path.join(A.lib, 'kit.json')))
-        fitm = cv2.erode(qm, np.ones((5, 5), np.uint8)).astype(bool)
+        fitm = cv2.erode(qm_fit, np.ones((5, 5), np.uint8)).astype(bool)
         light = lining_median(D, dq)
         grade = lambda c, g: np.clip(c / np.array(kit['paper_white'], np.float32) * light * g * np.array([0.86, 0.97, 1.08]), 0, 255)
         LEN = A.piece * np.linalg.norm(dq[2] - dq[3]); cv = Canvas(out); last = -1
@@ -159,7 +168,7 @@ elif A.cmd == 'place':
             return float(heap[ys, xs].mean())
         # back band stays empty (nothing climbs the back wall)
         bm_ = np.zeros((H, W), np.uint8); cv2.fillPoly(bm_, [np.array([P(0, 0), P(1, 0), P(1, mg['b'] + 0.03), P(0, mg['b'] + 0.03)], np.int32)], 1)
-        ring = (qm > 0) & ~heap & (bm_ == 0)
+        ring = (qm_clip > 0) & ~heap & (bm_ == 0)
         walls = [(dq[3] - dq[0], 0), (dq[2] - dq[1], 1), (dq[2] - dq[3], 2)]          # left, right, front wall directions
         unc = ring.copy(); fails = 0; n_ring = 0; tot = max(1, ring.sum())
         while unc.sum() > 0.08 * tot and fails < 300 and n_ring < A.max_ring:
@@ -181,7 +190,7 @@ elif A.cmd == 'place':
                 cv2.circle(unc.view(np.uint8), (int(x), int(y)), max(4, int(LEN * 0.1)), 0, -1); fails += 1
         if n_ring:
             out = apply_target_colour(cv.img, cv.wood, load_target(os.path.join(A.lib, 'target.json')), region=cv.wood > 0.5)
-            ch = cv2.GaussianBlur(qm.astype(np.float32), (0, 0), 1.6)[..., None]          # shadows never leave the opening
+            ch = cv2.GaussianBlur(qm_clip.astype(np.float32), (0, 0), 1.6)[..., None]     # shadows never leave the opening
             out = (D * (1 - al) + wF * al) * (1 - ch) + out * ch
         print('ring pieces', n_ring)
     cv2.imwrite(op, np.clip(out, 0, 255).astype(np.uint8)); print('wrote', op)

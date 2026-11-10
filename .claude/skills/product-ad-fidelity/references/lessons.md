@@ -67,3 +67,5 @@ with the client — don't repeat them.
 | "Sentences too fast". | `pace_voice.py insert` 0.3-0.4 s at sentence ends, scenes stretched to match, captions stay through pauses. |
 | Gift badge floating mid-frame. | Card glued in the lid, upper right, leaning on the right wall, tracked; glow on "هدية سرية". |
 | Captions landed on the burner. | Move that caption group to the top zone. |
+| Ad 4: white band of lining in front of the heap ("fill to the front rim; pieces may hide behind the front wall"). | `box_masters.py place --front_hide`: heap extends under the front wall (front margin -0.14), fit loop never pulls the front in, front clip = real opening (no lining strip), sides keep the strip; then restore every leather pixel from the empty plate. |
+| Ad 4: stills cut from the delivered video were soft/pixelated (compressed + digital zoom + burned captions). | Find the ORIGINAL stills in the client's Magnific project (match each scene by ORB inliers; the folder also holds rejected versions — pick the one that matches the video) and use the higher-res approved heap (beethoven_04) with a light sharpen + warm daylight lift. |
