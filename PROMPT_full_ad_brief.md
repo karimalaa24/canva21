@@ -10,11 +10,17 @@ PROJECT
 - Voiceover: [use the voice from: Drive link | keep the reference voice | remove the phrase "..."]
 - Pauses: [none | add natural pauses between sentences]
 
+SOURCES
+- If this is a re-do of an existing video: use the ORIGINAL Magnific stills of each scene from the project
+  (match each scene to its still; ignore rejected versions), never frames cut from the video.
+- Brand name on every bag/box/lid must read exactly: [Beethoven] (check each still before motion).
+
 PRODUCT LOCK (non-negotiable)
 - The oud pieces and the box arrangement must be the approved ones from the skill library
   (assets/box_masters, ad-1 look). Box = open, empty, fitted cream insert, then fill with box_masters.py.
-- Box rims/walls/clasp/lid lettering stay untouched (0 changed pixels on the leather). No piece cut by a rim,
-  no wood over a rim, a thin calm lining strip at the edges is fine.
+- Use the APPROVED FILL RECIPE (skill): one approved heap only (no extra loose pieces), oud filled to the
+  front rim and hidden behind the front wall (no white band), every visible side piece whole, box rims/walls/
+  clasp/lid lettering untouched (0 changed pixels on the leather).
 - Lid lettering must read exactly: [Beethoven / فخامة سمو للطيب].
 
 SCENES (one line each — use the reference's cut points)
@@ -25,8 +31,9 @@ Props: [wooden carved burner + navy tube with incense sticks in scenes N, M | no
 Gift card: [inside the lid, upper right, leaning on the right wall | badge pop-up | none]
 
 LOOK & EDIT
-- Captions style: [two-line gold (ad 1) | karaoke white + black outline, yellow current word (ad 2)]
-- Caption text = the voiceover words, timed word by word; keep captions off products and props.
+- Captions style: [same as the reference video | two-line white + gold (ad 1/4) | karaoke white + outline, yellow word (ad 2)]
+- Caption text = the voiceover words, timed word by word; captions must never cover the oud, products or props
+  (move a caption group down/up per scene when needed).
 - Effects: [laser outline on the final boxes | glow around the card | soft sun ray in the long scene | none]
 - Long scene: [hold 2 s then slow zoom-in, locked Kling camera]
 - Pop-ups: tabby + tamara with their words at the end.
@@ -34,6 +41,10 @@ LOOK & EDIT
 BUDGET & APPROVALS
 - Show me every still first (free/65 credits) and wait for my OK before any Kling credit.
 - Each scene is generated ONCE in Kling — no second takes; fix small things locally.
+- Motion: start keyframe only (never start = end, it looks like a photo); the CAMERA moves (push-in, glide,
+  small arc, or a free local zoom + slight roll), hands calm with only a very small natural movement.
+- Hands holding a bag: both handles gathered in the fist in the still.
+- No invented frames in the edit (real Kling frames played at 30 fps).
 - Max credits for this job: [e.g. 3000]. Tell me the cost before each paid step.
 
 DELIVERY
