@@ -124,9 +124,9 @@ elif A.cmd == 'place':
     if A.front_hide:   # client ad 4: "fill up to the front rim; pieces may go hidden behind the front wall, no white gap"
         yy_, xx_ = np.mgrid[0:H, 0:W]; uvg = cv2.perspectiveTransform(np.c_[xx_.ravel(), yy_.ravel()].astype(np.float32)[None], Hd)[0]
         U, V = uvg[:, 0].reshape(H, W), uvg[:, 1].reshape(H, W)
-        fz = ((V > 0.55) & (U > 0.0) & (U < 1.0)).astype(np.uint8)          # front half + everything behind the front wall
+        fz = (((V > 0.9) & (U > 0.04) & (U < 0.96)) | (V > 0.99)).astype(np.uint8)   # front band + everything behind the front wall (sides stay strict)
         qm_fit = qm | fz                                                      # crossing the front rim is allowed (it hides)
-        qm_clip = qm | (qm0 & (V > 0.6)).astype(np.uint8)                     # front: wood right up to the rim, sides keep the strip
+        qm_clip = qm | (qm0 & (V > 0.85) & (U > 0.04) & (U < 0.96)).astype(np.uint8)   # front: wood right up to the rim, sides keep the strip
         mg['f'] = min(mg['f'], -0.14)
     for it in range(160):
         tq = np.array([P(mg['l'], mg['b']), P(1 - mg['r'], mg['b']), P(1 - mg['r'], 1 - mg['f']), P(mg['l'], 1 - mg['f'])], np.float32)
