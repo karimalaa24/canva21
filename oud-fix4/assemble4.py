@@ -2,7 +2,7 @@ import cv2,numpy as np,subprocess
 C=[0,89,238,386,562,651,719,805,947,1128]; W,H=1080,1920; D=4   # half dissolve (frames); cut 1->2 is hard
 clips=[]
 for n in range(1,10):
-    p=subprocess.run(['ffmpeg','-v','error','-i',f'k/k{n}.mp4','-vf','minterpolate=fps=30:mi_mode=mci:mc_mode=aobmc:vsbmc=1,scale=1080:1920,deflicker=size=9:mode=pm','-f','rawvideo','-pix_fmt','bgr24','-'],capture_output=True,check=True)
+    p=subprocess.run(['ffmpeg','-v','error','-i',f'k/k{n}.mp4','-vf','setpts=N/30/TB,fps=30,scale=1080:1920,deflicker=size=9:mode=pm','-f','rawvideo','-pix_fmt','bgr24','-'],capture_output=True,check=True)
     a=np.frombuffer(p.stdout,np.uint8).reshape(-1,H,W,3); clips.append(a); print(n,len(a),'need',C[n]-C[n-1]+2*D)
 enc=subprocess.Popen(['ffmpeg','-v','error','-y','-f','rawvideo','-pix_fmt','bgr24','-s',f'{W}x{H}','-r','30','-i','-','-i','dl/ad4.mp4','-map','0:v','-map','1:a','-c:v','libx264','-crf','15','-preset','slow','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-shortest','-movflags','+faststart','ed/clean4.mp4'],stdin=subprocess.PIPE)
 def get(i,t):  # frame of scene i at global frame t; scene i shown from C[i]-D (offset D into its clip)
