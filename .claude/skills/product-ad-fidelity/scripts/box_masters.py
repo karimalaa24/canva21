@@ -23,6 +23,7 @@ ap.add_argument('--master'); ap.add_argument('--relight', type=float, default=0.
 ap.add_argument('--left', type=float, default=0.0, help='starting margin at the left wall (fraction of width); the fit only pulls in')
 ap.add_argument('--right', type=float, default=0.0)
 ap.add_argument('--mirror', action='store_true')
+ap.add_argument('--finish', action='store_true', help='sharpen/lift wood + restore all leather pixels (approved ad 4)')
 ap.add_argument('--front_hide', action='store_true', help='fill up to the front rim; wood may continue hidden behind the front wall')
 ap.add_argument('--ring', type=int, default=1, help='fill the band between heap and walls with whole pieces')
 ap.add_argument('--piece', type=float, default=0.27, help='ring piece length / box front width (ad 1: ~1/3)')
@@ -193,6 +194,14 @@ elif A.cmd == 'place':
             ch = cv2.GaussianBlur(qm_clip.astype(np.float32), (0, 0), 1.6)[..., None]     # shadows never leave the opening
             out = (D * (1 - al) + wF * al) * (1 - ch) + out * ch
         print('ring pieces', n_ring)
+    if A.finish:   # approved ad-4 finish: light sharpen + warm daylight lift on the wood only, then every leather px back from the empty plate
+        m_ = (np.abs(out - D).max(2) > 6).astype(np.float32)
+        lab_ = cv2.cvtColor(D.astype(np.uint8), cv2.COLOR_BGR2LAB).astype(np.int16)
+        g_ = cv2.morphologyEx(((lab_[..., 1] < 124) & (lab_[..., 0] > 30)).astype(np.float32), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+        m_ = (cv2.GaussianBlur(m_, (0, 0), 2) * (1 - g_))[..., None]
+        sh_ = (out + (out - cv2.GaussianBlur(out, (0, 0), 1.6)) * 0.9) * np.array([0.97, 1.0, 1.06]) * 1.06
+        out = out * (1 - m_) + sh_ * m_
+        ga_ = cv2.GaussianBlur(g_, (0, 0), 0.7)[..., None]; out = out * (1 - ga_) + D * ga_
     cv2.imwrite(op, np.clip(out, 0, 255).astype(np.uint8)); print('wrote', op)
 
 

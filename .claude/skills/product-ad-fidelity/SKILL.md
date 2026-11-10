@@ -30,6 +30,18 @@ whose product area is empty. AI is used for what it is good at: empty plates, sc
   `beethoven_09` gave the most ad-1-like result in every ad-2 box.
 - Fonts: Almarai 800 (two-line gold style), Alexandria 900 (karaoke style). Logos: tabby / tamara.
 
+## APPROVED FILL RECIPE (latest, ad 4 — use this by default)
+```
+python scripts/box_masters.py place empty.png filled.png "BL BR FR FL" \
+       --master beethoven_04 --relight 1.0 --front_hide --ring 0 --finish --edge 4
+```
+- **One heap only** (`--ring 0`): extra loose pieces looked a different colour — rejected.
+- **Front filled to the rim** (`--front_hide`): wood continues hidden behind the front wall, no white band.
+- **Sides**: heap pulled in until every visible side piece is whole (thin lining strip is fine, cut pieces are not).
+- **beethoven_04** = highest-resolution approved heap; `--relight 1.0` + `--finish` for daylight scenes.
+- Quad = the CREAM interior opening, never the wall thickness (check it drawn on a grid before placing).
+- Source stills = the ORIGINAL Magnific images used in the delivered video (not frames from the video).
+
 ## Full-video pipeline
 ### 1. Inventory (free)
 - Cuts: `qc.py sheet` + frame-difference cut list; captions: per-frame yellow/white pixel boxes → word start
