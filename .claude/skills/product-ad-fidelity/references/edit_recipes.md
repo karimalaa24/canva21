@@ -38,3 +38,12 @@ caption/effect times by the cut length.
 - Same framing still with the prop → `track_insert.py clip out --still prop.png --poly "..."`.
 - Flat prop from another video (gift card) → quad mode with `--track` = the plane it rests on (lid lining).
 - Drift check: LK on points inside vs around the prop; median < 4 px is invisible.
+
+## Rebuild a delivered ad from its clean Kling clips (ad 5)
+1. Match every scene of the delivered video to its clip: NCC of 135×240 grey frames (ignore the caption band)
+   against every frame of every project clip → clip id + frame index at scene start / mid / end.
+2. Re-cut from the clean clips on the same scene times (real frames only, 24→30 by frame picking).
+3. Line on/off times of the old captions: per caption band, white / gold pixel columns per frame.
+4. Silences in the voice (`ebur`/RMS per 50 ms) → cut dead air, keep a pop-only section's audio free to redesign.
+5. Overlay (captions, cards, pills, logos) on the clean base, loudnorm two-pass to -14 LUFS / -1.5 dBTP.
+Scripts: `oud-fix5/base5.py` (scenes, free zooms, product lift) + `oud-fix5/titles5.py` (captions, review cards, pills, gift badge, tabby/tamara).
