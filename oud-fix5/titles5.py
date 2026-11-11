@@ -142,19 +142,35 @@ def card_rgba(p,scale=1.28):
     o=out.astype(np.float32); a=x[...,3:].astype(np.float32)/255
     reg=o[P:P+h,P:P+w]; reg[...,:3]=reg[...,:3]*(1-a)+x[...,:3]*a; reg[...,3:]=np.maximum(reg[...,3:],a*255)
     return o.astype(np.uint8)
-CARDS=[(card_rgba(RV+'c1.png'),2.76),(card_rgba(RV+'c2.png'),3.80),(card_rgba(RV+'c4.png'),5.00)]
-REV_END=6.12; CARD_TOP=170
+# pile like the delivered ad (client preferred it), cards x1.2, strong reviews first / middle / last
+ORDER=['c2','c5','c1','c6','c3','c4']   # السهلي, نايف, أم مطلق, محمد (شحن), نورة, ياسر
+POP0,POPDT,REV_END=2.70,0.50,6.20
+def levels(im):
+    out=[]
+    for d in range(6):
+        x=im.astype(np.float32)
+        if d:
+            sg=min(2.0*d,7.0); x[...,:3]=cv2.GaussianBlur(x[...,:3],(0,0),sg); x[...,3]=cv2.GaussianBlur(x[...,3],(0,0),sg*0.6)
+            L=x[...,:3].mean(2,keepdims=True); w=min(0.30*d,0.65); x[...,:3]=(x[...,:3]*(1-w)+L*0.92*w)*(1-min(0.07*d,0.30))
+        out.append(x)
+    return out
+PILE=[]; ytop=34
+for i,k in enumerate(ORDER):
+    im=card_rgba(RV+k+'.png',1.20); h,w=im.shape[:2]
+    x=(1080-25-(w-80)-40) if i%2==0 else (25-40)
+    PILE.append(dict(lv=levels(im),t0=POP0+POPDT*i,x=int(x),y=int(ytop-40))); ytop+=0.765*(h-80)
 def draw_reviews(fr,t):
-    if not (2.7<=t<=REV_END+0.05): return
-    for i,(im,t0) in enumerate(CARDS):
-        t1=CARDS[i+1][1] if i+1<len(CARDS) else REV_END
-        if t<t0: continue
-        k=(t-t0)/0.38; a=sstep(k*2.0); s=0.55+0.45*ease_back(k)
-        if t>t1:                                         # leaving: lift, shrink, fade
-            q=(t-t1)/0.28; a*=1-sstep(q); s*=1-0.06*sstep(q); dy=-36*sstep(q)
-        else: dy=0
-        if a<=0.003: continue
-        h,w=im.shape[:2]; paste(fr,im,int(W/2-w/2),int(CARD_TOP+dy),a,s)
+    if not (POP0-0.1<=t<REV_END): return
+    k=sstep((t-(POP0-0.08))/0.30)
+    if k>0:   # dim + soften the background like the original
+        bl=cv2.GaussianBlur(fr,(0,0),4.0); fr[:]=(fr*(1-0.6*k)+bl*0.6*k)*(1-0.42*k)
+    for i,c in enumerate(PILE):
+        if t<c['t0']: continue
+        d=sum(sstep((t-o['t0'])/0.22) for o in PILE[i+1:])
+        lo=min(int(d),5); hi=min(lo+1,5); f=d-int(d)
+        im=c['lv'][lo]*(1-f)+c['lv'][hi]*f if hi!=lo else c['lv'][lo]
+        q=(t-c['t0'])/0.18; a=sstep(q*1.6); s=0.62+0.38*ease_back(q)
+        paste(fr,im.astype(np.uint8),c['x'],c['y'],a,s)
 # ---- offer pills
 def pill(text,fs=64):
     f=FA(fs); tw=f.getlength(text,direction='rtl'); bw,bh=int(tw+110),int(fs*1.75); S=3
