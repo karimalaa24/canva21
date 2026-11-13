@@ -62,3 +62,4 @@ The full production spec is the client's "BEETHOVEN — REEL 01: EXPECTATION →
 - New calmer music (Lyria 3 Pro, 117 s, 160 cr) `audio/music_arabic_calm_v2.mp3`, ducked -22 dB gaps / -30 dB under the voice.
 - Exports: `reel01_FINAL_MUSIC.mp4`, `reel01_FINAL_NO_MUSIC.mp4`, `reel01_CLEAN_no_captions.mp4` (voice + pops, no music). Credits on this reel: 3,510.
 - Secret-gift badge (burgundy, gold gift icon + هدية سرّية) pops with the word in S08 + pop SFX (client request).
+- Music v3: heritage (Lyria 3 Pro, 160 cr) audio/music_heritage_v3.mp3 from 69 s, -20/-28 dB. Credits on this reel: 3,670.

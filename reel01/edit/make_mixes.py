@@ -9,15 +9,16 @@ pops = np.zeros_like(v)
 for k, t in json.load(open('pop_times.json')).items():
     g = 0.55 if (k.startswith('R') or k == 'reveal') else 0.85; i = int((t - 0.035) * sr); pops[i:i + len(pop)] += pop * g
 vp = v + pops
-m = rd('music_arabic_calm_v2.mp3')[:N]; hop = int(0.02 * sr); n = N // hop
+MUSIC, OFF, GAP_DB, UNDER_DB = 'music_heritage_v3.mp3', 69.0, -20, -28   # client: heritage, audible throughout
+m = rd(MUSIC)[int(OFF * sr):int(OFF * sr) + N]; hop = int(0.02 * sr); n = N // hop
 e = np.array([np.sqrt((v[i * hop:(i + 1) * hop] ** 2).mean()) for i in range(n)])
 act = np.convolve((20 * np.log10(e + 1e-9) > -38).astype(float), np.ones(13), 'same') > 0
 g = np.zeros(n); cur = 0
 for i in range(n):
     tg = 1.0 if act[i] else 0.0; cur += (0.33 if tg > cur else 0.044) * (tg - cur); g[i] = cur
-duck = np.repeat(10 ** ((-22 - 8 * g) / 20), hop); duck = np.concatenate([duck, np.full(N - len(duck), duck[-1])])
+duck = np.repeat(10 ** ((GAP_DB + (UNDER_DB - GAP_DB) * g) / 20), hop); duck = np.concatenate([duck, np.full(N - len(duck), duck[-1])])
 tt = np.arange(N) / sr; env = duck * np.clip(tt / 0.8, 0, 1) * np.clip((END - tt) / 2.0, 0, 1)
-for name, mix in [('mix_voice_pops_music_v2', vp + m * env[:, None]), ('mix_voice_pops', vp)]:
+for name, mix in [('mix_voice_pops_music_v3', vp + m * env[:, None]), ('mix_voice_pops', vp)]:
     mix.astype(np.float32).tofile(name + '.f32')
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', '48000', '-ac', '2', '-i', name + '.f32', '-c:a', 'pcm_s16le', name + '_raw.wav'], check=True)
     r = subprocess.run(['ffmpeg', '-hide_banner', '-i', name + '_raw.wav', '-af', 'loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json', '-f', 'null', '-'], capture_output=True, text=True).stderr
