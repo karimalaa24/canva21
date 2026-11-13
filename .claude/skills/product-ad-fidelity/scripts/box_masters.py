@@ -34,6 +34,7 @@ ap.add_argument('--max_overlap', type=float, default=0.55)
 ap.add_argument('--wall_px', type=int, default=8, help='even lining strip kept between wood and the walls (px at plate size)')
 ap.add_argument('--front', type=float, default=0.0)
 ap.add_argument('--back', type=float, default=0.1, help='empty band left at the back of the new box (fraction of depth)')
+ap.add_argument('--clip_quad', default='', help='real rim quad "BL BR FR FL": wood is clipped to it (use with a LOWERED placement quad so the heap sits low and the front wall hides it - reel 01)')
 ap.add_argument('--quad_only', action='store_true', help='opening = the given rim quad only (skip the cream-colour detection, which drops a shaded inner wall and leaves a side gap - reel 01)')
 ap.add_argument('--tol', type=int, default=5, help='wood px allowed past a rim during the fit (tips tuck under the rim and are clipped); raise (100-400) when a side gap shows (reel 01)')
 A = ap.parse_args(); os.makedirs(A.lib, exist_ok=True); META = os.path.join(A.lib, 'masters.json')
@@ -148,6 +149,10 @@ elif A.cmd == 'place':
     wF *= (lining_median(D, dq) / np.array(m['lining'], np.float32)) ** A.relight   # match the new scene light
     wa = np.clip((wa - 0.3) / 0.45, 0, 1)    # drop the faint dark seam the master kept along its old (ad-1) rim cut
     al = (wa * cv2.GaussianBlur(qm_clip.astype(np.float32), (0, 0), 1.6))[..., None]   # safety clip (front: hides behind the wall)
+    if A.clip_quad:   # wood never drawn outside the real rim (front wall / clasp hide the lowered heap)
+        cq = np.float32([[float(v) for v in p.split(',')] for p in A.clip_quad.split()]); cm = np.zeros((H, W), np.uint8)
+        cv2.fillPoly(cm, [cq.astype(np.int32)], 1); cm = cv2.erode(cm, np.ones((3, 3), np.uint8))
+        al = al * cv2.GaussianBlur(cm.astype(np.float32), (0, 0), 1.0)[..., None]
     out = D * (1 - al) + wF * al
     # 4) ring fill: the band between the whole heap and the walls gets WHOLE real pieces (same cut-outs, same colour
     #    model as ad 1), laid over the heap's edge -> the box looks full, the heap edge looks natural, and no piece is
