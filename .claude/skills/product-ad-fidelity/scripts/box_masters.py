@@ -34,6 +34,8 @@ ap.add_argument('--max_overlap', type=float, default=0.55)
 ap.add_argument('--wall_px', type=int, default=8, help='even lining strip kept between wood and the walls (px at plate size)')
 ap.add_argument('--front', type=float, default=0.0)
 ap.add_argument('--back', type=float, default=0.1, help='empty band left at the back of the new box (fraction of depth)')
+ap.add_argument('--quad_only', action='store_true', help='opening = the given rim quad only (skip the cream-colour detection, which drops a shaded inner wall and leaves a side gap - reel 01)')
+ap.add_argument('--tol', type=int, default=5, help='wood px allowed past a rim during the fit (tips tuck under the rim and are clipped); raise (100-400) when a side gap shows (reel 01)')
 A = ap.parse_args(); os.makedirs(A.lib, exist_ok=True); META = os.path.join(A.lib, 'masters.json')
 meta = json.load(open(META)) if os.path.exists(META) else {}
 
@@ -97,7 +99,7 @@ elif A.cmd == 'place':
     opn = ((lab[..., 1] >= 124) & (lab[..., 0] > 60)).astype(np.uint8) & cv2.dilate(qm, np.ones((41, 41), np.uint8))
     opn = cv2.morphologyEx(opn, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17)))   # drops the thin rim highlight
     n_, lb_, st_, _ = cv2.connectedComponentsWithStats(opn)
-    if n_ > 1:
+    if n_ > 1 and not A.quad_only:
         opn = (lb_ == 1 + np.argmax(st_[1:, 4])).astype(np.uint8)
         opn = cv2.morphologyEx(opn, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25)))
         cn_, _ = cv2.findContours(opn, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE); opn = np.zeros_like(opn); cv2.drawContours(opn, cn_, -1, 1, -1)
@@ -134,7 +136,7 @@ elif A.cmd == 'place':
         Hm = cv2.getPerspectiveTransform(sq, tq)
         wa = cv2.warpPerspective(src[..., 3] / 255, Hm, (W, H), flags=cv2.INTER_LINEAR)
         out = (wa > 0.35) & (qm_fit == 0); n_out = int(out.sum())
-        if n_out <= 5: break
+        if n_out <= A.tol: break
         oy, ox = np.where(out); uv = cv2.perspectiveTransform(np.c_[ox, oy].astype(np.float32)[None], Hd)[0]
         uu, vv = uv[:, 0], uv[:, 1]; k = 0.006
         if (uu < 0.25).sum() > 10: mg['l'] += k
