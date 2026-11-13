@@ -27,3 +27,9 @@
 
 اُطْلُب التَّايْقَر الْحِين…
 وَمِنْ أَوَّل تَبْخِيرَة بِتَعْرِف لِيه يِمْدَحُونَه.
+
+---
+VO received 13 Nov (voice_over.mp3, 45.6 s). Transcribed with Magnific video_analyze (3 passes): matches the script,
+EXCEPT phrase 2 (1.9–5.7 s), spoken as: «هذا كلام عميل بعد تجربته للتايقر من بيتهوفن»
+(script: «جَرَّب التَّايْقَر مِنْ بَيْتْهُوفِن، وَهَذَا اللِّي كَتَبَه:»). Captions follow the spoken words.
+Pauses added between phrases on client request (vo_pauses.json, +5.05 s, silence only) -> vo_paced.wav (-14 LUFS).
