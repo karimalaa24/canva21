@@ -42,3 +42,15 @@ The full production spec is the client's "BEETHOVEN — REEL 01: EXPECTATION →
    (٣ أَوْقِيَّات / + ٣ هدية / مبخرة خشبية / أعواد موروكي / وهدية سرّية / الشحن مجّانًا / tabby+tamara / اطلب الآن).
    Reusable code: `oud-fix5/titles5.py` (captions, pills, logos, pops), `oud-fix5/base5.py` (scene builder + lift).
 4. Deliver: captioned MP4 1080×1920 30 fps + clean version, commit to `reel01/exports/`.
+
+## Update — 13 Nov evening: REEL DELIVERED
+- VO: `audio/voice_over.mp3` (Lahjati). Phrase 2 is spoken as «هذا كلام عميل بعد تجربته للتايقر من بيتهوفن» (captioned as spoken).
+  Pauses added between phrases on client request (`audio/vo_pauses.json`, +5.05 s, silence only) -> `audio/vo_paced.wav` (-14 LUFS).
+- Client edits applied: no caption under a WhatsApp screenshot while it is read; oud LOW covering the floor, no visible cut piece
+  (`edit/FILL_RECIPE.md`); closing box corner filled with one whole real piece; review background = same majlis with a gold
+  mabkhara centred on the table (`images/review_plate_mabkhara_centered.png`).
+- Kling 3.0 1080p, start keyframe only, one take each: S02 5 s, S07 8 s, S09 4 s, S10 6 s, S11 7 s (`clips/`). S06 and S08 = local still motion.
+  S11: Kling re-invented the big Arabic on the bag -> clean bag artwork tracked back in (`edit/fix_bag_track.py`, raw take in `clips/raw/`).
+- Exports: `exports/reel01_FINAL.mp4` (captioned) + `exports/reel01_CLEAN_no_captions.mp4` (screenshots kept, captions/graphics off).
+  Rebuild: `python edit/build_reel.py out.mp4 --clips [--clean]`.
+- Credits on this reel: 650 stills + 2,700 Kling = 3,350.
