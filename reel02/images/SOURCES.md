@@ -1,0 +1,18 @@
+# Reel 02 stills — Magnific project "Beethoven Reel 02 Confidence", Nano Banana 2.1, 9:16, 2k (1536×2752), 65 cr each
+| still | creation | references used | local work |
+|---|---|---|---|
+| room master (`references/room_master_magnific.png`) | s7oWMool8e | style: Reel 01 majlis (If6gJw6tvE) | — |
+| P01 closed box | nVju5LrYQD | room, three boxes, lid artwork | none needed (BeetHoven + Arabic correct) |
+| P02 mabkhara + smoke | ksD2Wev16B | room, gold mabkhara | — |
+| P03 open box | VXU5jO1MMU | room, approved empty box, lid artwork | oud fill: beethoven_0708 --mirror, hide r |
+| P04 three boxes 45° | jUXnVmgLD0 | room, three boxes, empty box | oud fill beethoven_09 hide l; 3 wordmarks Beethoven→BeetHoven |
+| P05 quantity low | 6AHIfrEiJO | room, three boxes, empty box | oud fill beethoven_09 --mirror hide r; 3 wordmarks |
+| P06 gifts flat-lay | LwBYMfgswO | room, burner+Moroki | — |
+| P07 bag | LwBYMEUswO | room, bag, boxes, mabkhara | — (bag artwork correct; box lids at grazing angle) |
+| P08 full offer | huRw4VnvqL | room, full offer, empty box | oud fill beethoven_09 hide l — OPEN: bag (ribbon handles, two-line Arabic, Beethoven), lid wordmarks |
+| P09 closing | s7oWDH6l8e | room, full offer, empty box | oud fill beethoven_09 hide l — OPEN: same as P08 + too close to P08's angle |
+| PLATE | YMLQK6wWeC | room, gold mabkhara | — (centred, unlit) |
+Rim quads (BL BR FR FL), lowered with `edit/low_quad.py Q 0.06 0.035`, then `box_masters.py place --clip_quad Q --quad_only --wall_px 3 --edge 2 --tol 5 --relight 1.0 --front_hide --ring 0 --finish`:
+P03 614,1703 1302,1764 1021,1969 177,1841 · P04 248,1826 644,1694 831,1914 446,2074 · P05 1000,1888 1395,1900 1250,1983 868,1928 ·
+P08 362,2076 662,2062 722,2162 456,2206 · P09 284,2132 606,2087 676,2205 394,2254 — side/back cut px: 0 on all.
+Wordmarks: `edit/wordmarks.py` + `edit/wordmarks.json` (source = BeetHoven on P03 lid lining).
