@@ -176,6 +176,31 @@ def pill(text, fs=60):
     ImageDraw.Draw(sh).rounded_rectangle((30, 38, 30 + bw, 38 + bh), radius=bh // 2, fill=150); sh = sh.filter(ImageFilter.GaussianBlur(12))
     shimg = Image.new('RGBA', (bw + 60, bh + 60), (0, 0, 0, 255)); shimg.putalpha(sh); out.alpha_composite(shimg); out.alpha_composite(img, (30, 30)); return np.array(out)
 P1, P2, CTA = pill('٣ أَوْقِيَّات'), pill('+ ٣ هدية'), pill('اطلب الآن', 64)
+
+def gift_badge(bw=560, bh=190):   # secret gift: burgundy card, gold gift icon + "هدية سرّية" (contents stay undisclosed)
+    S = 3; img = Image.new('RGBA', (bw * S, bh * S), (0, 0, 0, 0))
+    g = np.linspace(0, 1, bh * S)[:, None, None]; col = np.array([128, 26, 42]) * (1 - g) + np.array([66, 10, 20]) * g
+    m = Image.new('L', (bw * S, bh * S), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, bw * S - 1, bh * S - 1), radius=30 * S, fill=255)
+    img.alpha_composite(Image.fromarray(np.dstack([col * np.ones((1, bw * S, 1)), np.array(m)]).astype(np.uint8), 'RGBA'))
+    d = ImageDraw.Draw(img); d.rounded_rectangle((4 * S, 4 * S, bw * S - 5 * S, bh * S - 5 * S), radius=27 * S, outline=(226, 188, 118, 255), width=3 * S)
+    gold, gold2, rib = (232, 196, 126, 255), (196, 150, 78, 255), (128, 26, 42, 255)
+    gx, gy, gw = (bw - 150) * S, 42 * S, 104 * S                       # gift icon on the right (RTL reading starts there)
+    d.rounded_rectangle((gx, gy + 34 * S, gx + gw, gy + gw + 6 * S), radius=7 * S, fill=gold2)
+    d.rounded_rectangle((gx - 7 * S, gy + 18 * S, gx + gw + 7 * S, gy + 42 * S), radius=7 * S, fill=gold)
+    d.rectangle((gx + gw / 2 - 9 * S, gy + 18 * S, gx + gw / 2 + 9 * S, gy + gw + 6 * S), fill=rib)
+    d.ellipse((gx + gw / 2 - 40 * S, gy - 8 * S, gx + gw / 2 - 2 * S, gy + 22 * S), outline=gold, width=9 * S)
+    d.ellipse((gx + gw / 2 + 2 * S, gy - 8 * S, gx + gw / 2 + 40 * S, gy + 22 * S), outline=gold, width=9 * S)
+    d.ellipse((gx + gw / 2 - 10 * S, gy + 3 * S, gx + gw / 2 + 10 * S, gy + 23 * S), fill=gold)
+    d.line(((bw - 182) * S, 32 * S, (bw - 182) * S, (bh - 32) * S), fill=(226, 188, 118, 150), width=2 * S)
+    f3 = FA(70 * S); txt = 'هدية سرّية'; l, tp, r, b = f3.getbbox(txt, direction='rtl'); area = (bw - 190) * S
+    tw = Image.new('L', (bw * S, bh * S), 0); ImageDraw.Draw(tw).text(((area - (r - l)) / 2 - l + 8 * S, (bh * S - (b - tp)) / 2 - tp), txt, font=f3, fill=255, direction='rtl')
+    gg = np.linspace(0, 1, bh * S)[:, None, None]; tc = np.array(GT) * (1 - gg) + np.array(GB) * gg
+    img.alpha_composite(Image.fromarray(np.dstack([tc * np.ones((1, bw * S, 1)), np.array(tw)]).astype(np.uint8), 'RGBA'))
+    img = img.resize((bw, bh), Image.LANCZOS); out = Image.new('RGBA', (bw + 60, bh + 60), (0, 0, 0, 0)); sh = Image.new('L', (bw + 60, bh + 60), 0)
+    ImageDraw.Draw(sh).rounded_rectangle((30, 40, 30 + bw, 40 + bh), radius=30, fill=160); sh = sh.filter(ImageFilter.GaussianBlur(14))
+    shimg = Image.new('RGBA', (bw + 60, bh + 60), (0, 0, 0, 255)); shimg.putalpha(sh); out.alpha_composite(shimg); out.alpha_composite(img, (30, 30)); return np.array(out)
+GIFT = gift_badge()
+
 def load_rgba(p, size):
     x = cv2.cvtColor(cv2.imread(p, cv2.IMREAD_UNCHANGED), cv2.COLOR_BGRA2RGBA); a = x[..., 3].astype(np.float32)
     a = cv2.erode(a, np.ones((5, 5), np.uint8)); x[..., 3] = cv2.GaussianBlur(a, (3, 3), 0).astype(np.uint8); return cv2.resize(x, size, interpolation=cv2.INTER_AREA)
@@ -191,6 +216,7 @@ def draw_graphics(fr, t):
         pop_in(fr, P2, 330, 620, g, t, b)
     pop_in(fr, TABBY, 735, 590, M(39.50), t, EXT(40.97)); pop_in(fr, TAMARA, 345, 590, M(40.00), t, EXT(40.97))
     pop_in(fr, CTA, 540, 610, M(41.70), t)
+    pop_in(fr, GIFT, 540, 380, M(32.08), t, CUT(33.39) - 0.02, s0=0.25)   # secret gift badge with the word
 
 # ---------------- render ----------------
 N = int(round(END * FPS))
