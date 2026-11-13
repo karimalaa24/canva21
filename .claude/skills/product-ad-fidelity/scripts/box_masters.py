@@ -35,6 +35,7 @@ ap.add_argument('--wall_px', type=int, default=8, help='even lining strip kept b
 ap.add_argument('--front', type=float, default=0.0)
 ap.add_argument('--back', type=float, default=0.1, help='empty band left at the back of the new box (fraction of depth)')
 ap.add_argument('--clip_quad', default='', help='real rim quad "BL BR FR FL": wood is clipped to it (use with a LOWERED placement quad so the heap sits low and the front wall hides it - reel 01)')
+ap.add_argument('--hide_side', default='', choices=['', 'l', 'r'], help='side wall whose OUTER face the camera sees: wood may tuck behind it like the front wall (no visible cut) - reel 01')
 ap.add_argument('--quad_only', action='store_true', help='opening = the given rim quad only (skip the cream-colour detection, which drops a shaded inner wall and leaves a side gap - reel 01)')
 ap.add_argument('--tol', type=int, default=5, help='wood px allowed past a rim during the fit (tips tuck under the rim and are clipped); raise (100-400) when a side gap shows (reel 01)')
 A = ap.parse_args(); os.makedirs(A.lib, exist_ok=True); META = os.path.join(A.lib, 'masters.json')
@@ -132,6 +133,15 @@ elif A.cmd == 'place':
         qm_fit = qm | fz                                                      # crossing the front rim is allowed (it hides)
         qm_clip = qm | (qm0 & (V > 0.85) & (U > 0.04) & (U < 0.96)).astype(np.uint8)   # front: wood right up to the rim, sides keep the strip
         mg['f'] = min(mg['f'], -0.14)
+    if A.clip_quad:   # whole pieces: the fit must keep every piece inside the REAL rim on sides/back; only the front may hide
+        cq0 = np.float32([[float(v) for v in p.split(',')] for p in A.clip_quad.split()]); cm0 = np.zeros((H, W), np.uint8)
+        cv2.fillPoly(cm0, [cq0.astype(np.int32)], 1)
+        if A.wall_px > 0: cm0 = cv2.erode(cm0, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * A.wall_px + 1,) * 2))
+        yy_, xx_ = np.mgrid[0:H, 0:W]; uvc = cv2.perspectiveTransform(np.c_[xx_.ravel(), yy_.ravel()].astype(np.float32)[None], cv2.getPerspectiveTransform(cq0, np.float32([[0, 0], [1, 0], [1, 1], [0, 1]])))[0]
+        Uc, Vc = uvc[:, 0].reshape(H, W), uvc[:, 1].reshape(H, W)
+        qm_fit = cm0 | (((Vc > 0.9) & (Uc > 0.04) & (Uc < 0.96)) | (Vc > 0.99)).astype(np.uint8)
+        if A.hide_side == 'l': qm_fit |= ((Uc < 0.08) & (Vc > -0.02)).astype(np.uint8)
+        if A.hide_side == 'r': qm_fit |= ((Uc > 0.92) & (Vc > -0.02)).astype(np.uint8)
     for it in range(160):
         tq = np.array([P(mg['l'], mg['b']), P(1 - mg['r'], mg['b']), P(1 - mg['r'], 1 - mg['f']), P(mg['l'], 1 - mg['f'])], np.float32)
         Hm = cv2.getPerspectiveTransform(sq, tq)
@@ -153,6 +163,11 @@ elif A.cmd == 'place':
         cq = np.float32([[float(v) for v in p.split(',')] for p in A.clip_quad.split()]); cm = np.zeros((H, W), np.uint8)
         cv2.fillPoly(cm, [cq.astype(np.int32)], 1); cm = cv2.erode(cm, np.ones((3, 3), np.uint8))
         al = al * cv2.GaussianBlur(cm.astype(np.float32), (0, 0), 1.0)[..., None]
+        Vq = cv2.perspectiveTransform(np.c_[np.mgrid[0:H, 0:W][1].ravel(), np.mgrid[0:H, 0:W][0].ravel()].astype(np.float32)[None], cv2.getPerspectiveTransform(cq, np.float32([[0, 0], [1, 0], [1, 1], [0, 1]])))[0][:, 1].reshape(H, W)
+        Uq = cv2.perspectiveTransform(np.c_[np.mgrid[0:H, 0:W][1].ravel(), np.mgrid[0:H, 0:W][0].ravel()].astype(np.float32)[None], cv2.getPerspectiveTransform(cq, np.float32([[0, 0], [1, 0], [1, 1], [0, 1]])))[0][:, 0].reshape(H, W)
+        hid = (Vq >= 0.92) | ((Uq < 0.5) if A.hide_side == 'l' else np.zeros_like(Vq, bool)) | ((Uq > 0.5) if A.hide_side == 'r' else np.zeros_like(Vq, bool))
+        side_cut = int(((wa > 0.35) & (cm == 0) & ~hid).sum())   # wood cut by a rim the viewer can see (front / outer-face side hiding excluded)
+        print('side/back cut px: %d' % side_cut)
     out = D * (1 - al) + wF * al
     # 4) ring fill: the band between the whole heap and the walls gets WHOLE real pieces (same cut-outs, same colour
     #    model as ad 1), laid over the heap's edge -> the box looks full, the heap edge looks natural, and no piece is
