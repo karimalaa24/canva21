@@ -47,12 +47,12 @@ SC = [  # id, start, end, source still, motion(u 0..1) -> (scale, cx, cy, dx, dy
  ('S06', 19.00, 21.84, 's06_high3', lambda u: (1.14 - 0.12 * eo(u), 560, 960, 0, 0)),            # pull-back (final: local)
  ('S07', 21.84, 28.26, 's07_low3', lambda u: (1.08 + 0.03 * u, 540, 1300, 50 - 100 * u, 0)),     # lateral
  ('S08', 28.26, 33.39, 's08_flatlay', lambda u: (1.10 + 0.04 * u, 540, 900, 0, 60 - 120 * u)),   # overhead slide (final: local)
- ('S09', 33.39, 36.27, 's09_bag', lambda u: (1.03 + 0.07 * u, 560, 1150, 30 - 60 * u, 0)),
+ ('S09', 33.39, 36.27, 's09_bagstill', lambda u: (1.02 + 0.09 * ss(u), 470, 1150, 0, 0)),   # client: Kling take rejected (bag turned) -> approved still, straight push-in, smoke removed
  ('S10', 36.27, 41.05, 's10_offer', lambda u: (1.02 + 0.04 * u, 540, 1250, 0, 0)),
  ('S11', 41.05, END, 's11_close_hero', lambda u: (1.02 + 0.05 * eo(min(u * 1.25, 1)), 560, 1300, 0, 0)),
 ]
 SC = [(sid, CUT(a), (END if b >= 46 else CUT(b)), src, mv) for sid, a, b, src, mv in SC]
-LOCAL_FINAL = {'S06', 'S08'}   # stay as local still motion in the final
+LOCAL_FINAL = {'S06', 'S08', 'S09'}   # stay as local still motion in the final
 
 def lift(f, strength=1.0):   # ad-5 product light lift, weighted to the lower frame
     x = f.astype(np.float32) / 255; L = 0.299 * x[..., 2] + 0.587 * x[..., 1] + 0.114 * x[..., 0] + 1e-4

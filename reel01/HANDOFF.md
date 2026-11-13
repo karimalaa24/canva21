@@ -54,3 +54,10 @@ The full production spec is the client's "BEETHOVEN — REEL 01: EXPECTATION →
 - Exports: `exports/reel01_FINAL.mp4` (captioned) + `exports/reel01_CLEAN_no_captions.mp4` (screenshots kept, captions/graphics off).
   Rebuild: `python edit/build_reel.py out.mp4 --clips [--clean]`.
 - Credits on this reel: 650 stills + 2,700 Kling = 3,350.
+
+## Update — client review after delivery
+- S09 Kling take REJECTED (the bag turned with the arc) -> `clips/raw/S09_kling_REJECTED_bag_turns.mp4`. S09 now = approved still with the
+  smoke removed (`images/s09_bagstill_final.png`) + local straight push-in (free).
+- Pop SFX (`audio/pop_sfx.wav`, same as ad 5) at each screenshot entrance (quieter) and at tabby / tamara (`audio/pop_times.json`).
+- New calmer music (Lyria 3 Pro, 117 s, 160 cr) `audio/music_arabic_calm_v2.mp3`, ducked -22 dB gaps / -30 dB under the voice.
+- Exports: `reel01_FINAL_MUSIC.mp4`, `reel01_FINAL_NO_MUSIC.mp4`, `reel01_CLEAN_no_captions.mp4` (voice + pops, no music). Credits on this reel: 3,510.
