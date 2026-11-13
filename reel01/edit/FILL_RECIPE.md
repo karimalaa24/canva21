@@ -9,5 +9,5 @@ box_masters.py place <raw> <filled> "$LQ" --clip_quad "<rim quad>" --master beet
 | s06 | 552,1325 907,1277 1062,1487 690,1612 | --hide_side r | 0 |
 | s07 | 129,1988 583,1954 783,2133 262,2204 | --hide_side r | 0 |
 | s10 | 542,1608 1000,1608 1058,1808 500,1808 | (frontal) | 0 |
-| s11 | 686,1814 1038,1850 931,1958 626,1928 | --mirror --hide_side l | 0 |
+| s11 | 686,1814 1038,1850 931,1958 626,1928 | --hide_side r --back 0.10 --ring 1 --max_ring 2 --seed 4 (beethoven_0708; one real piece fills the back-right corner) | 0 |
 Then `python edit/make_finals.py` (BeetHoven wordmarks, bag Arabic).

@@ -66,7 +66,8 @@ STILL = {}
 for _, _, _, src, _ in SC:
     if src != 'plate' and src not in STILL: STILL[src] = lift(cover(cv2.imread(R + 'images/' + src + '_final.png')))
 room = cover(cv2.imread(R + 'references/room_master_new_majlis.jpg'))
-PLATE = (cv2.GaussianBlur(room, (0, 0), 9).astype(np.float32) * 0.62).astype(np.uint8)    # quiet same-room review plate
+plate_src = cover(cv2.imread(R + 'images/review_plate_mabkhara_centered.png'))   # same majlis + gold mabkhara on the table (client)
+PLATE = (cv2.GaussianBlur(plate_src, (0, 0), 2.2).astype(np.float32) * 0.80).astype(np.uint8)
 CLIPS = {}
 if USE_CLIPS:
     for sid, a, b, src, mv in SC:
