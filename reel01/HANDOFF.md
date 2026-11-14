@@ -63,3 +63,4 @@ The full production spec is the client's "BEETHOVEN — REEL 01: EXPECTATION →
 - Exports: `reel01_FINAL_MUSIC.mp4`, `reel01_FINAL_NO_MUSIC.mp4`, `reel01_CLEAN_no_captions.mp4` (voice + pops, no music). Credits on this reel: 3,510.
 - Secret-gift badge (burgundy, gold gift icon + هدية سرّية) pops with the word in S08 + pop SFX (client request).
 - Music v3: heritage (Lyria 3 Pro, 160 cr) audio/music_heritage_v3.mp3 from 69 s, -20/-28 dB. Credits on this reel: 3,670.
+- S09: gold mabkhara removed from the bag still too (client: it showed no smoke) — images/s09_bag_nomabkhara.png (free: per-row sofa rebuild + inpaint, boxes protected). Exports rebuilt.

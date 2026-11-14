@@ -64,7 +64,7 @@ Use distinct framings — never a run of identical front-on push-ins. Approved s
 | S06 | High angle (≈ 45°) onto the table, boxes on a diagonal | THREE boxes: one open, two closed |
 | S07 | Low three-quarter from the right, table height, depth | THREE boxes: open box nearest camera |
 | S08 | Top-down flat-lay on the walnut | Wooden burner (unlit) + Moroki tube, cap and fanned sticks |
-| S09 | Low front three-quarter, bag ≈ 50 % of width | Bag + two closed boxes + gold mabkhara |
+| S09 | Low front three-quarter, bag ≈ 50 % of width | Bag + two closed boxes — NO mabkhara (client: a mabkhara without smoke looks dead here) |
 | S10 | Front three-quarter from the left, slightly high | Full offer: 3 boxes (1 open), bag, gold mabkhara, wooden burner, Moroki |
 | S11 | Front three-quarter from the right | Full offer, closing hero |
 | PLATE | Wide, standing eye height | Empty majlis with ONE gold-and-black mabkhara **exactly in the centre of the table**, no smoke, nothing else |
