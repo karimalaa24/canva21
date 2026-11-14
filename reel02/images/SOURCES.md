@@ -39,3 +39,7 @@ Heap versions kept in images/v3_heap/. Wordmarks re-applied (edit/wordmarks.py p
 ## P07 v4 (14 Nov) — client: the mabkhara in the bag shot has no smoke -> remove it
 Magnific images_retouch (replace, precise) with mask `images/p07_mask_mabkhara.png` (mabkhara only, boxes + bag excluded),
 150 credits; every pixel outside the mask then restored from the approved still. Previous still in images/v4/.
+## Oud specks (14 Nov) — client: light "wooden dots" inside the oud (P03)
+Cause: tiny gaps between whole pieces showing the cream lining + pale crumbs at piece edges. `edit/fix_specks.py raw filled out [fac]`
+inpaints only SMALL enclosed light components (≤350 px) from the surrounding wood; grain and the cream at the back untouched.
+Applied to all five boxes (P03 fac 0.62, others 0.82), wordmarks re-applied, S08/S11 product tracking re-run. No credits.
