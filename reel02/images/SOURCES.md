@@ -30,3 +30,9 @@ Credits: v1 715 + v2 520 = 1,235 on stills.
 P03 re-generated at real scale (box ≈ 1/4 of the table width, table edges out of frame): gOIV5q4SXO, refs PLATE + P03 v2 + empty box + P04 (scale).
 Rim quad 698,1710 1244,1736 999,1876 326,1789, beethoven_09 --mirror, hide r, side/back cut px 0. Lid BeetHoven correct (no fix needed).
 Previous oversized version kept in images/v2/. Credits on stills: 1,235 + 65 = 1,300.
+## v3 oud (14 Nov) — client: "no cut heap; same look and distribution, but whole real pieces"
+All five open boxes refilled with `edit/whole_fill.py` (no heap master): only whole real cut-outs from
+box_masters/pieces (10 pieces, approved colour target), size ≈ 0.3 × local floor width, one layer covering the floor
++ ~25 % second layer, cream visible at the back, wood up to the front rim (hidden behind the front wall), no visible
+cut (script check "visible cut px: 0" on all + visual check). Seeds: P03 1 (hide r) · P04 2 (l) · P05 2 (r) · P08 3 cov 0.03 (l) · P09 1 (l).
+Heap versions kept in images/v3_heap/. Wordmarks re-applied (edit/wordmarks.py p04 p05 p08 p09). No credits.
