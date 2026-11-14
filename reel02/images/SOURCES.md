@@ -26,3 +26,7 @@ New rim quads: P03 649,1692 1240,1746 966,1888 273,1792 (beethoven_09 --mirror, 
 P08 302,1914 550,1880 630,1956 400,2002 (09, hide l) · P09 290,1925 534,1891 650,1959 398,1999 (09, hide l). side/back cut px 0.
 Lettering fixed locally (edit/wordmarks.json): P04 3 lids, P08 4 lids + bag word + bag line «فخامة سمو», P09 4 lids + bag word + bag two-line Arabic -> one small «فخامة سمو».
 Credits: v1 715 + v2 520 = 1,235 on stills.
+## P03 v3 (14 Nov) — client: box too big for the table
+P03 re-generated at real scale (box ≈ 1/4 of the table width, table edges out of frame): gOIV5q4SXO, refs PLATE + P03 v2 + empty box + P04 (scale).
+Rim quad 698,1710 1244,1736 999,1876 326,1789, beethoven_09 --mirror, hide r, side/back cut px 0. Lid BeetHoven correct (no fix needed).
+Previous oversized version kept in images/v2/. Credits on stills: 1,235 + 65 = 1,300.
