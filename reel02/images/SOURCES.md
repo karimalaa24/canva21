@@ -16,3 +16,13 @@ Rim quads (BL BR FR FL), lowered with `edit/low_quad.py Q 0.06 0.035`, then `box
 P03 614,1703 1302,1764 1021,1969 177,1841 · P04 248,1826 644,1694 831,1914 446,2074 · P05 1000,1888 1395,1900 1250,1983 868,1928 ·
 P08 362,2076 662,2062 722,2162 456,2206 · P09 284,2132 606,2087 676,2205 394,2254 — side/back cut px: 0 on all.
 Wordmarks: `edit/wordmarks.py` + `edit/wordmarks.json` (source = BeetHoven on P03 lid lining).
+
+## v2 (14 Nov) — client: one niche and one table in every still
+Locked room = PLATE composition: walnut slat niche centred behind the table (one carved Sadu band, hidden glow), navy seating with ivory piping,
+cream rug with Sadu border, square dark-walnut table with four straight legs. Every new still used the PLATE as Image 1.
+Re-generated (v1 kept in images/v1/): P01 O6fXahIynm · P03 gOIV8o9SXO · P04 cplblVi0eP (first retake s7o0BX1l8e had a slab table -> rejected) ·
+P07 YMLHjjuWeC · P08 tCiw6iFmZJ · P09 ov9g9k7829 (first retake 4Ru8EQ39Aa had two boxes, a goblet burner and a green lid lining -> rejected).
+New rim quads: P03 649,1692 1240,1746 966,1888 273,1792 (beethoven_09 --mirror, hide r) · P04 236,1800 533,1726 668,1846 352,1940 (09, hide l) ·
+P08 302,1914 550,1880 630,1956 400,2002 (09, hide l) · P09 290,1925 534,1891 650,1959 398,1999 (09, hide l). side/back cut px 0.
+Lettering fixed locally (edit/wordmarks.json): P04 3 lids, P08 4 lids + bag word + bag line «فخامة سمو», P09 4 lids + bag word + bag two-line Arabic -> one small «فخامة سمو».
+Credits: v1 715 + v2 520 = 1,235 on stills.

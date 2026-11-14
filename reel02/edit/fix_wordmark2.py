@@ -1,6 +1,6 @@
 """Reel 02: replace a wrong script wordmark ("Beethoven") with the approved "BeetHoven", free and local.
 
-Source word = the correct BeetHoven engraved on the P03 lid lining (reel02/images/p03_raw.png), alpha from
+Source word = the correct BeetHoven engraved on the P03 lid lining (reel02/images/v1/p03_raw.png (first P03 take)), alpha from
 difference to the local median background. Target word = connected gold components that touch the given seed
 points (so the B monogram above and the Arabic below are never touched). The old word is inpainted, then the
 source word is scaled to the old word's length along its principal axis, rotated to its angle and composited in
@@ -16,7 +16,7 @@ _SRC = None
 def src_word():
     global _SRC
     if _SRC is None:
-        s = cv2.imread(os.path.join(HERE, '..', 'images', 'p03_raw.png'))
+        s = cv2.imread(os.path.join(HERE, '..', 'images', 'v1', 'p03_raw.png'))
         x0, y0, x1, y1 = 868, 1334, 1078, 1390
         P = 40
         R = s[y0:y1, x0:x1].astype(np.float32)
@@ -132,4 +132,52 @@ def fix(img, bbox, seeds, thr=14, scale=1.0, dil=3, debug=None, weight=1.7, eras
     out = out * (1 - A[..., None]) + g * A[..., None]
     if debug is not None:
         cv2.imwrite(debug, (word * 255))
+    return np.clip(out, 0, 255).astype(np.uint8)
+
+
+def ar_alpha(text, ttf=os.path.join(HERE, '..', '..', 'oud-fix5', 'fonts', 'Almarai-ExtraBold.ttf')):
+    from PIL import Image, ImageDraw, ImageFont
+    f = ImageFont.truetype(ttf, 200, layout_engine=ImageFont.Layout.RAQM)
+    im = Image.new('L', (2400, 600), 0)
+    ImageDraw.Draw(im).text((100, 100), text, font=f, fill=255, direction='rtl')
+    a = np.array(im).astype(np.float32) / 255
+    ys, xs = np.where(a > 0.05)
+    return a[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+
+
+def fix_ar(img, bbox, text, width=None, thr=14, dil=2, angle=0.0, weight=1.0, cy_override=None):
+    """Erase every gold stroke inside bbox and render `text` (full Almarai TTF) centred there, same gold."""
+    x0, y0, x1, y1 = bbox
+    P = 40
+    pad = cv2.copyMakeBorder(img, P, P, P, P, cv2.BORDER_REFLECT)
+    bg = cv2.medianBlur(pad[y0:y1 + 2 * P, x0:x1 + 2 * P], 31)[P:-P, P:-P].astype(np.float32)
+    R = img[y0:y1, x0:x1].astype(np.float32)
+    d = np.abs(R - bg).mean(2)
+    word = (d > thr).astype(np.uint8)
+    gold = np.median(R[(word > 0) & (d > np.percentile(d[word > 0], 50))], 0)
+    ys, xs = np.nonzero(word)
+    cx, cy = x0 + (xs.min() + xs.max()) / 2, y0 + (ys.min() + ys.max()) / 2
+    W = width or (xs.max() - xs.min())
+    if cy_override is not None: cy = cy_override
+    mask = np.zeros(img.shape[:2], np.uint8)
+    mask[y0:y1, x0:x1] = cv2.dilate(word * 255, np.ones((2 * dil + 1, 2 * dil + 1), np.uint8))
+    out = img.astype(np.float32)
+    w = np.ones(img.shape[:2], np.float32); w[mask > 0] = 0
+    w[y0:y1, x0:x1] *= 1 - cv2.dilate(word.astype(np.float32), np.ones((7, 7), np.uint8))
+    full_bg = cv2.GaussianBlur(out * w[..., None], (0, 0), 6) / (cv2.GaussianBlur(w, (0, 0), 6)[..., None] + 1e-4)
+    tex = out - cv2.GaussianBlur(out, (0, 0), 2.0)
+    ring = cv2.dilate(mask, np.ones((15, 15), np.uint8)) & ~cv2.dilate(mask, np.ones((5, 5), np.uint8))
+    rs = (ring > 0) & (w > 0)
+    sd = 1.4826 * np.median(np.abs(tex[rs] - np.median(tex[rs], 0)), 0) if rs.sum() > 50 else np.array([2., 2., 2.])
+    noise = cv2.GaussianBlur(np.random.RandomState(2).randn(*img.shape[:2]).astype(np.float32), (0, 0), 0.7)
+    noise /= noise.std() + 1e-6
+    mk = cv2.GaussianBlur(mask.astype(np.float32) / 255, (0, 0), 1.0)[..., None]
+    out = out * (1 - mk) + (full_bg + noise[..., None] * sd) * mk
+    a = ar_alpha(text)
+    k = W / a.shape[1]
+    M = cv2.getRotationMatrix2D((a.shape[1] / 2, a.shape[0] / 2), angle, k)
+    M[0, 2] += cx - a.shape[1] / 2
+    M[1, 2] += cy - a.shape[0] / 2
+    A = np.clip(cv2.warpAffine(a, M, (img.shape[1], img.shape[0]), flags=cv2.INTER_AREA) * weight, 0, 1)
+    out = out * (1 - A[..., None]) + np.array(gold, np.float32) * A[..., None]
     return np.clip(out, 0, 255).astype(np.uint8)
