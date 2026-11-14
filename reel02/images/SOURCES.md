@@ -36,3 +36,6 @@ box_masters/pieces (10 pieces, approved colour target), size ≈ 0.3 × local fl
 + ~25 % second layer, cream visible at the back, wood up to the front rim (hidden behind the front wall), no visible
 cut (script check "visible cut px: 0" on all + visual check). Seeds: P03 1 (hide r) · P04 2 (l) · P05 2 (r) · P08 3 cov 0.03 (l) · P09 1 (l).
 Heap versions kept in images/v3_heap/. Wordmarks re-applied (edit/wordmarks.py p04 p05 p08 p09). No credits.
+## P07 v4 (14 Nov) — client: the mabkhara in the bag shot has no smoke -> remove it
+Magnific images_retouch (replace, precise) with mask `images/p07_mask_mabkhara.png` (mabkhara only, boxes + bag excluded),
+150 credits; every pixel outside the mask then restored from the approved still. Previous still in images/v4/.
