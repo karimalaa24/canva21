@@ -30,7 +30,7 @@ Magnific project: **Beethoven Reel 02 Confidence**.
 
 ## Credits (Magnific, measured)
 Room + stills: 1,300 (20 × 65). Kling 3.0 1080p: 2,340 (S02 4 s, S03 5 s — rejected, S08 5 s, S11 6 s, S12 6 s).
-Music: 0 (reused). **Total Reel 02: 3,640.** Balance after: 13,831.
+Music: 0 (reused). Bag-shot mabkhara removal (images_retouch): 150. **Total Reel 02: 3,790.**
 
 ## Known limits
 - Small background lids: BeetHoven repaired but soft at high zoom; Arabic correct but low detail.
