@@ -67,3 +67,6 @@ The full production spec is the client's "BEETHOVEN — REEL 01: EXPECTATION →
 - PACE (client: "voice too calm and slow — raise the tempo, remove the pauses, make it fit an ad"): added pauses removed, natural gaps
   tightened to ~0.18 s (0.24-0.28 at hook / offer bridge / closing), speech x1.08 (pitch kept), light compression + presence:
   `audio/vo_tight.wav` + `audio/vo_tight.json` (build_reel now maps all times through it). Reel 52.1 s -> 36.5 s.
+- PACE v2 (client: 36.5 s version "too fast — like he can't breathe"; wants a middle: lively but ordered and clear):
+  gaps ~0.32 s (0.40-0.42 at hook end / offer bridge / closing, 0.30 inside the gift list), speech x1.03, light compression.
+  `audio/vo_tight.json` (the rejected fast map kept as `vo_tight_fast_rejected.json`). Reel = 40.9 s.

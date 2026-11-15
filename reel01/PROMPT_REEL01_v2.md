@@ -40,7 +40,7 @@ paid step.
 | Brand wordmark | **BeetHoven** (script, capital B and H) on every lid, lining and bag. Lids: gold B + BeetHoven + «فخامة سمو للطيب». Bag: gold B + BeetHoven + ONE small line «فخامة سمو» (never the large two-line Arabic on the bag) |
 | Audience / language | Saudi audience, one Najdi narrator; talk to the client in concise Egyptian Arabic |
 | Format | 9:16 · 1080 × 1920 · constant 30 fps · H.264 / AAC |
-| Duration | Set by the real VO at ad pace (§3) plus a ≈ 1.2 s ending hold — delivered reel 36.5 s. Never cut words |
+| Duration | Set by the real VO at ad pace (§3) plus a ≈ 1.2 s ending hold — delivered reel 40.9 s. Never cut words |
 | Reviews | 3 customers / 4 crops; R01A + R01B are the SAME customer |
 | Room | The client's majlis photo (`reel01/references/room_master_new_majlis.jpg`): sand plaster wall, slatted walnut niche with carved triangle/diamond panel and hidden glow, navy floor seating with ivory piping and Sadu cushions, low square dark-walnut table, cream Sadu rug. Same room, table and light in every shot |
 | People / hands | None |
@@ -104,11 +104,11 @@ words actually spoken.
   for an Arabic transcript with times. Compare line by line with the script; report any difference to the client.
 - Measure the phrases from the waveform (RMS, 10 ms). The delivered VO had 19 phrases.
 
-**Pacing — ad tempo (client-approved after two rounds)**
-- Tight, energetic ad delivery: inter-phrase gaps ≈ 0.18 s (≈ 0.25 s after the hook, before the offer bridge and
-  before the closing). Speech tempo × 1.06–1.08 with pitch preserved, light compression and a little presence.
-  The delivered reel runs 36.5 s. Never cut words; remove silence only between phrases. (A slower version with
-  added pauses was rejected as "too calm".) Scene cuts sit in the middle of each gap; captions stay on to it.
+**Pacing — ad tempo, clear and breathing (client-approved after three rounds)**
+- Inter-phrase gaps ≈ 0.32 s; ≈ 0.40–0.42 s after the hook, before the offer bridge and before the closing; ≈ 0.30 s
+  inside the gift list. Speech tempo × 1.03 with pitch preserved, light compression (2.5:1) and a little presence.
+  Delivered reel: 40.9 s. Rejected: added long pauses (52 s, "too calm") and 0.18 s gaps + × 1.08 (36.5 s, "can't breathe").
+  Never cut words; edit silence only between phrases. Cuts sit in the middle of each gap; captions stay on to it.
 
 ---
 
