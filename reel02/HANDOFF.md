@@ -39,4 +39,5 @@ Music: 0 (reused). Bag-shot mabkhara removal (images_retouch): 150. **Total Reel
 ## Update 15 Nov — faster pace (client)
 Silences tightened (`edit/tighten_vo.py`): sentence ends 0.30-0.35 s, commas 0.25 s, before the first review 0.45 s,
 photo-card pause 1.3 s; speech untouched (no stretch, no speed-up). VO 48.8 -> 40.1 s; reel 49.8 -> 41.3 s (1,240 frames).
-Previous pause file kept as `audio/vo_pauses_v1.json`. Mixes rebuilt (`make_mixes.py 41.33`). No credits.
+Previous pause file kept as `audio/vo_pauses_v1.json`. No credits.
+v3 (15 Nov, client: "a little breath between scenes"): pauses at scene cuts 0.45-0.55 s, inside scenes unchanged -> reel 42.77 s (1,283 frames), mixes `make_mixes.py 42.77`.
