@@ -7,10 +7,11 @@ A = '/home/user/canva21/reel02/audio/'; SR = 48000
 a = np.frombuffer(subprocess.run(['ffmpeg', '-v', 'error', '-i', A + 'voice_over.mp3', '-ac', '2', '-ar', str(SR), '-f', 'f32le', '-'],
                                  capture_output=True, check=True).stdout, np.float32).reshape(-1, 2)
 # (gap start, gap end, target length) — original-VO seconds
-G = [(2.01, 2.64, .30), (4.61, 5.56, .35), (8.12, 8.72, .30), (9.62, 10.37, .35), (12.28, 12.89, .30), (13.98, 15.08, .45),
+# v3 (client 15 Nov: "a little breath between scenes"): pauses AT SCENE CUTS 0.45-0.55 s, pauses inside a scene stay tight
+G = [(2.01, 2.64, .45), (4.61, 5.56, .50), (8.12, 8.72, .30), (9.62, 10.37, .50), (12.28, 12.89, .30), (13.98, 15.08, .55),
      (16.33, 17.16, 1.30),                                     # customer photo card sits in this pause
-     (17.93, 18.79, .25), (20.82, 21.60, .35), (22.28, 23.18, .40), (23.73, 24.53, .25), (25.23, 25.92, .30), (27.22, 28.20, .35),
-     (29.95, 30.39, .30), (33.29, 33.71, .30), (34.70, 35.21, .30), (37.39, 38.21, .35), (39.31, 40.12, .35), (42.65, 43.71, .40),
+     (17.93, 18.79, .25), (20.82, 21.60, .35), (22.28, 23.18, .50), (23.73, 24.53, .25), (25.23, 25.92, .45), (27.22, 28.20, .35),
+     (29.95, 30.39, .44), (33.29, 33.71, .30), (34.70, 35.21, .50), (37.39, 38.21, .50), (39.31, 40.12, .35), (42.65, 43.71, .55),
      (45.25, 45.79, .30)]
 X = int(0.02 * SR); out = []; prev = 0; edits = []; rng = np.random.RandomState(0)
 for s, e, tgt in G:
@@ -26,5 +27,5 @@ for s, e, tgt in G:
 out.append(a[prev:]); b = np.concatenate(out)
 subprocess.run(['ffmpeg', '-v', 'error', '-y', '-f', 'f32le', '-ar', str(SR), '-ac', '2', '-i', '-', '-c:a', 'pcm_s16le', A + 'vo_paced.wav'], input=b.tobytes(), check=True)
 json.dump({'pauses_added': edits, 'targets': G, 'silence_only': True, 'no_time_stretch': True, 'duration_s': round(len(b) / SR, 3),
-           'note': 'v2 pace 15 Nov; v1 (+0.8 s photo pause only) was 48.81 s'}, open(A + 'vo_pauses.json', 'w'), indent=1)
+           'note': 'v3 pace 15 Nov: breath at scene cuts; v2 40.10 s; v1 48.81 s'}, open(A + 'vo_pauses.json', 'w'), indent=1)
 print('paced VO', round(len(b) / SR, 2), 's; removed', round(-sum(d for _, d in edits), 2), 's net')
