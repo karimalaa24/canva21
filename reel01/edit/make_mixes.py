@@ -1,9 +1,9 @@
 """voice + pops (+ music) -> -14 LUFS mixes. usage: python make_mixes.py   (run in reel01/audio)"""
 import numpy as np, subprocess, json, os
-sr = 48000; END = 52.1; N = int(END * sr)
+sr = 48000; END = json.load(open('vo_tight.json'))['end']; N = int(END * sr)
 def rd(f):
     r = subprocess.run(['ffmpeg', '-v', 'error', '-i', f, '-ac', '2', '-ar', '48000', '-f', 'f32le', '-'], capture_output=True); return np.frombuffer(r.stdout, np.float32).reshape(-1, 2).copy()
-v = rd('vo_paced.wav'); v = np.concatenate([v, np.zeros((max(0, N - len(v)), 2), np.float32)])[:N]
+v = rd('vo_tight.wav'); v = np.concatenate([v, np.zeros((max(0, N - len(v)), 2), np.float32)])[:N]
 pop = rd('pop_sfx.wav'); pop[-int(0.03 * sr):] *= np.linspace(1, 0, int(0.03 * sr))[:, None]
 pops = np.zeros_like(v)
 for k, t in json.load(open('pop_times.json')).items():

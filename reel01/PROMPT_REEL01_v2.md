@@ -40,7 +40,7 @@ paid step.
 | Brand wordmark | **BeetHoven** (script, capital B and H) on every lid, lining and bag. Lids: gold B + BeetHoven + «فخامة سمو للطيب». Bag: gold B + BeetHoven + ONE small line «فخامة سمو» (never the large two-line Arabic on the bag) |
 | Audience / language | Saudi audience, one Najdi narrator; talk to the client in concise Egyptian Arabic |
 | Format | 9:16 · 1080 × 1920 · constant 30 fps · H.264 / AAC |
-| Duration | Set by the real VO plus added pauses plus an ending hold (delivered reel: 52.1 s). No hard ceiling; never cut or speed up words |
+| Duration | Set by the real VO at ad pace (§3) plus a ≈ 1.2 s ending hold — delivered reel 36.5 s. Never cut words |
 | Reviews | 3 customers / 4 crops; R01A + R01B are the SAME customer |
 | Room | The client's majlis photo (`reel01/references/room_master_new_majlis.jpg`): sand plaster wall, slatted walnut niche with carved triangle/diamond panel and hidden glow, navy floor seating with ivory piping and Sadu cushions, low square dark-walnut table, cream Sadu rug. Same room, table and light in every shot |
 | People / hands | None |
@@ -104,11 +104,11 @@ words actually spoken.
   for an Arabic transcript with times. Compare line by line with the script; report any difference to the client.
 - Measure the phrases from the waveform (RMS, 10 ms). The delivered VO had 19 phrases.
 
-**Pacing (client: "some parts are too fast")**
-- Insert silence between phrases, never inside a word: 0.15–0.40 s per gap (longer after the hook, before the offer
-  bridge, before the gifts, before the closing). The delivered reel added 5.05 s in total (`audio/vo_pauses.json`).
-- Never time-stretch or speed up speech. Scene cuts sit in the middle of a lengthened pause; a caption stays on
-  through the pause that follows it.
+**Pacing — ad tempo (client-approved after two rounds)**
+- Tight, energetic ad delivery: inter-phrase gaps ≈ 0.18 s (≈ 0.25 s after the hook, before the offer bridge and
+  before the closing). Speech tempo × 1.06–1.08 with pitch preserved, light compression and a little presence.
+  The delivered reel runs 36.5 s. Never cut words; remove silence only between phrases. (A slower version with
+  added pauses was rejected as "too calm".) Scene cuts sit in the middle of each gap; captions stay on to it.
 
 ---
 

@@ -64,3 +64,6 @@ The full production spec is the client's "BEETHOVEN — REEL 01: EXPECTATION →
 - Secret-gift badge (burgundy, gold gift icon + هدية سرّية) pops with the word in S08 + pop SFX (client request).
 - Music v3: heritage (Lyria 3 Pro, 160 cr) audio/music_heritage_v3.mp3 from 69 s, -20/-28 dB. Credits on this reel: 3,670.
 - S09: gold mabkhara removed from the bag still too (client: it showed no smoke) — images/s09_bag_nomabkhara.png (free: per-row sofa rebuild + inpaint, boxes protected). Exports rebuilt.
+- PACE (client: "voice too calm and slow — raise the tempo, remove the pauses, make it fit an ad"): added pauses removed, natural gaps
+  tightened to ~0.18 s (0.24-0.28 at hook / offer bridge / closing), speech x1.08 (pitch kept), light compression + presence:
+  `audio/vo_tight.wav` + `audio/vo_tight.json` (build_reel now maps all times through it). Reel 52.1 s -> 36.5 s.

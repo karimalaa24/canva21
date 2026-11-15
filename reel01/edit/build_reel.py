@@ -9,17 +9,19 @@ R = '/home/user/canva21/reel01/'
 FONT = '/home/user/canva21/oud-fix5/fonts/Almarai-ExtraBold.ttf'
 LOGOS = '/home/user/canva21/.claude/skills/product-ad-fidelity/assets/'
 import json as _json
-PZ = _json.load(open('/home/user/canva21/reel01/audio/vo_pauses.json'))['pauses_added']   # [(pos_in_original_vo, seconds)]
-def M(t):    # original-VO time -> paced time (pauses inserted at the gap midpoints)
-    return t + sum(d for p, d in PZ if p < t - 1e-6)
-def CUT(t):  # a cut at a gap midpoint lands in the middle of the lengthened pause
-    return M(t) + sum(d / 2 for p, d in PZ if abs(p - t) < 0.06)
-def EXT(t):  # a caption that ends just before a pause stays on through it
-    return M(t) + sum(d for p, d in PZ if t - 1e-6 <= p < t + 0.12)
+VOJ = _json.load(open('/home/user/canva21/reel01/audio/vo_tight.json'))   # client: tight ad pace (was vo_pauses.json = slow, paused)
+PZ, TEMPO = VOJ['pauses_added'], VOJ.get('tempo', 1.0)                      # [(gap midpoint in original VO, seconds added (<0 = removed))]
+def M(t):    # original-VO time -> edited-VO time (gap edits at the midpoints, then the tempo change)
+    return (t + sum(d for p, d in PZ if p < t - 1e-6)) / TEMPO
+def CUT(t):  # a cut at a gap midpoint lands in the middle of the edited gap
+    return M(t) + sum(d / 2 for p, d in PZ if abs(p - t) < 0.06) / TEMPO
+def EXT(t):  # a caption that ends just before a gap stays on until the middle of that gap
+    nxt = [p for p, d in PZ if t - 1e-6 <= p < t + 0.5]
+    return CUT(nxt[0]) - 0.02 if nxt else M(t)
 W, H, FPS = 1080, 1920, 30
-END = round(M(45.65) + 1.40, 2)      # last word + natural ending hold
+END = VOJ['end']      # last word + ending hold
 args = sys.argv[1:]; OUT = args[0]; CLEAN = '--clean' in args; USE_CLIPS = '--clips' in args
-AUDIO = args[args.index('--audio') + 1] if '--audio' in args else R + 'audio/vo_paced.wav'
+AUDIO = args[args.index('--audio') + 1] if '--audio' in args else R + 'audio/vo_tight.wav'
 
 def FA(s): return ImageFont.truetype(FONT, s, layout_engine=ImageFont.Layout.RAQM)
 def ss(x): x = min(max(x, 0), 1); return x * x * (3 - 2 * x)
@@ -51,7 +53,7 @@ SC = [  # id, start, end, source still, motion(u 0..1) -> (scale, cx, cy, dx, dy
  ('S10', 36.27, 41.05, 's10_offer', lambda u: (1.02 + 0.04 * u, 540, 1250, 0, 0)),
  ('S11', 41.05, END, 's11_close_hero', lambda u: (1.02 + 0.05 * eo(min(u * 1.25, 1)), 560, 1300, 0, 0)),
 ]
-SC = [(sid, CUT(a), (END if b >= 46 else CUT(b)), src, mv) for sid, a, b, src, mv in SC]
+SC = [(sid, CUT(a), (END if sid == 'S11' else CUT(b)), src, mv) for sid, a, b, src, mv in SC]
 LOCAL_FINAL = {'S06', 'S08', 'S09'}   # stay as local still motion in the final
 
 def lift(f, strength=1.0):   # ad-5 product light lift, weighted to the lower frame
