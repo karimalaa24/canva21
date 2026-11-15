@@ -11,7 +11,7 @@ LOGOS = '/home/user/canva21/.claude/skills/product-ad-fidelity/assets/'
 PZ = json.load(open(R + 'audio/vo_pauses.json'))['pauses_added']
 def M(t): return t + sum(d for p, d in PZ if p < t - 1e-6)            # original-VO time -> paced time
 W, H, FPS = 1080, 1920, 30
-END = round(M(47.66) + 1.30, 2)
+END = round(M(47.66) + 1.20, 2)
 args = sys.argv[1:]; OUT = args[0]; CLEAN = '--clean' in args; USE_CLIPS = '--clips' in args
 AUDIO = args[args.index('--audio') + 1] if '--audio' in args else R + 'audio/vo_paced.wav'
 def FA(s): return ImageFont.truetype(FONT, s, layout_engine=ImageFont.Layout.RAQM)
@@ -130,8 +130,8 @@ SC = [  # id, start, end, still, kling clip or None, local motion u->(scale,cx,c
  ('S11', 37.80, 43.18, 'p08', 'S11', None),                                                          # full offer, smoke (Kling)
  ('S12', 43.18, 99, 'p09', 'S12', None),                                                             # closing, pull-back (Kling)
 ]
-R2A_END = 16.55                               # R2A holds past its last word (16.33), then the photo card takes the 1.6 s pause
-PHOTO_IN, R2B_IN = R2A_END, M(17.16) - 0.12   # photo card 1.25 s, R2B4 enters just before «ما شاء الله»
+R2A_END = M(16.33) + 0.15                     # R2A holds just past its last word, then the photo card takes the 1.3 s pause
+PHOTO_IN, R2B_IN = R2A_END, M(17.16) - 0.08   # photo card ~1.05 s, R2B4 enters just before «ما شاء الله»
 def tm(x): return R2A_END if x == 'R2A_END' else (END if x >= 90 else M(x))
 SC = [(sid, tm(a), tm(b), st, cl, mv) for sid, a, b, st, cl, mv in SC]
 STILL = {}
