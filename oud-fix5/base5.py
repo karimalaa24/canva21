@@ -40,6 +40,19 @@ def cover(im):
     y0=(im.shape[0]-H)//2; x0=(im.shape[1]-W)//2; return im[y0:y0+H,x0:x0+W]
 def zoom(im,s,cx,cy):
     M=np.float32([[s,0,cx-s*cx],[0,s,cy-s*cy]]); return cv2.warpAffine(im,M,(W,H),flags=cv2.INTER_LANCZOS4,borderMode=cv2.BORDER_REFLECT)
+import os,json
+if os.environ.get('TMAP'):   # retime to the paced voice: cuts mapped, clips keep their natural speed (24 fps source)
+    TM=json.load(open(os.environ['TMAP'])); _P,_T=TM['pauses_added'],TM['tempo']
+    def MAP(t):
+        s=t
+        for p,d in _P:
+            r=-d; a_,b_=p-r/2,p+r/2
+            if t>=b_: s-=r
+            elif t>a_: s-=(t-a_)
+        return s/_T
+    S=[(nm,cl,a,b,MAP(t0),(TM['end'] if t1>=31 else MAP(t1)),zf,md) for nm,cl,a,b,t0,t1,zf,md in S]
+    REALSPEED=True
+else: REALSPEED=False
 out=sys.argv[1]; sample=len(sys.argv)>2
 enc=None if sample else subprocess.Popen(['ffmpeg','-nostdin','-v','error','-y','-f','rawvideo','-pix_fmt','bgr24','-s',f'{W}x{H}','-r','30','-i','-','-c:v','libx264','-crf','12','-preset','slow','-pix_fmt','yuv420p',out],stdin=subprocess.PIPE)
 cache={}; N=int(round(S[-1][5]*FPS)); samples=[]
@@ -49,7 +62,7 @@ for n in range(N):
     name,clip,a,b,t0,t1,zf,mode=sc
     if clip not in cache: cache={clip:[cover(f) for f in load(clip)]}
     fr=cache[clip]; nf=int(round((t1-t0)*FPS))
-    k=int(round(a+(b-a)*min((t-t0)*FPS/max(nf-1,1),1))); k=min(k,len(fr)-1)
+    k=int(round(a+(t-t0)*24)) if REALSPEED else int(round(a+(b-a)*min((t-t0)*FPS/max(nf-1,1),1))); k=min(k,len(fr)-1)
     im=fr[k]
     if zf: s,cx,cy=zf(t-t0,t1-t0); im=zoom(im,s,cx,cy) if abs(s-1)>1e-3 else im
     im=lift(im,mode)

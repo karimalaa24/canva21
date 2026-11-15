@@ -193,13 +193,27 @@ def draw_pills(fr,t):
         k=(t-t0)/0.40; a=sstep(k*2.2)*(1-sstep((t-(t1-0.15))/0.15)); s=0.35+0.65*ease_back(k)
         h,w=im.shape[:2]; paste(fr,im,int(W/2-w/2),1500-h//2,a,s)
 items_np=[[(t,np.array(im),x,y) for t,im,x,y,_ in g['items']] for g in groups]
+import os,json
+if os.environ.get('TMAP'):   # overlays follow the words: render each new frame at its old-timeline time
+    TM=json.load(open(os.environ['TMAP'])); _P,_T=TM['pauses_added'],TM['tempo']
+    def _MAP(t):
+        s=t
+        for p,d in _P:
+            r=-d; a_,b_=p-r/2,p+r/2
+            if t>=b_: s-=r
+            elif t>a_: s-=(t-a_)
+        return s/_T
+    _old=np.arange(0,40,0.001); _new=np.array([_MAP(x) for x in _old])
+    def OLD(tn): i=np.searchsorted(_new,tn,side='right')-1; return float(_old[max(0,min(i,len(_old)-1))])
+else:
+    OLD=lambda tn: tn
 dec=subprocess.Popen(['ffmpeg','-nostdin','-v','error','-i',SRC,'-f','rawvideo','-pix_fmt','rgb24','-'],stdout=subprocess.PIPE)
 enc=subprocess.Popen(['ffmpeg','-nostdin','-v','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r','30','-i','-','-i',AUDIO,'-map','0:v','-map','1:a','-c:v','libx264','-crf','15','-preset','slow','-pix_fmt','yuv420p','-c:a','aac','-b:a','192k','-shortest','-movflags','+faststart',OUT],stdin=subprocess.PIPE)
 n=0
 while True:
     buf=dec.stdout.read(W*H*3)
     if len(buf)<W*H*3: break
-    fr=np.frombuffer(buf,np.uint8).reshape(H,W,3).astype(np.float32); t=n/FPS
+    fr=np.frombuffer(buf,np.uint8).reshape(H,W,3).astype(np.float32); t=OLD(n/FPS)
     for gi,g in enumerate(groups):
         if not (g['st']-0.05<=t<=g['en']): continue
         ga=sstep((t-g['st'])/0.25)*(1-sstep((t-(g['en']-0.18))/0.18)) if g['en']<90 else sstep((t-g['st'])/0.25)
