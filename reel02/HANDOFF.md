@@ -35,3 +35,8 @@ Music: 0 (reused). Bag-shot mabkhara removal (images_retouch): 150. **Total Reel
 ## Known limits
 - Small background lids: BeetHoven repaired but soft at high zoom; Arabic correct but low detail.
 - S03 is local still motion (Kling take turned the box). S12 uses a local counter-zoom to hide an invented ceiling/marble floor.
+
+## Update 15 Nov — faster pace (client)
+Silences tightened (`edit/tighten_vo.py`): sentence ends 0.30-0.35 s, commas 0.25 s, before the first review 0.45 s,
+photo-card pause 1.3 s; speech untouched (no stretch, no speed-up). VO 48.8 -> 40.1 s; reel 49.8 -> 41.3 s (1,240 frames).
+Previous pause file kept as `audio/vo_pauses_v1.json`. Mixes rebuilt (`make_mixes.py 41.33`). No credits.
