@@ -1,0 +1,63 @@
+{
+  "reel": "03",
+  "stage": "script_reviews_and_shot_plan",
+  "script_status": "proposed",
+  "customer_conversations": 2,
+  "primary_display_views": 3,
+  "full_message_alternatives": 1,
+  "source_crops": [
+    {
+      "file": "reviews/01_party_full_whatsapp.png",
+      "source_name": "1000395787.jpg",
+      "source_library_id": "libfile_c31193d7d41c8191b26b1e86aaef3a4b",
+      "rect": [
+        142,
+        204,
+        684,
+        355
+      ],
+      "customer": "A",
+      "role": "full source alternative"
+    },
+    {
+      "file": "reviews/01A_party_plan_whatsapp.png",
+      "source_name": "1000395787.jpg",
+      "source_library_id": "libfile_c31193d7d41c8191b26b1e86aaef3a4b",
+      "rect": [
+        142,
+        204,
+        684,
+        302
+      ],
+      "customer": "A",
+      "role": "first display"
+    },
+    {
+      "file": "reviews/01B_party_interest_whatsapp.png",
+      "source_name": "1000395787.jpg",
+      "source_library_id": "libfile_c31193d7d41c8191b26b1e86aaef3a4b",
+      "rect": [
+        142,
+        302,
+        684,
+        355
+      ],
+      "customer": "A",
+      "role": "same message second display"
+    },
+    {
+      "file": "reviews/02_majlis_diffusion_whatsapp.png",
+      "source_name": "1000395789.jpg",
+      "source_library_id": "libfile_7a6e23bf1d5c8191b486d388ef44c552",
+      "rect": [
+        84,
+        826,
+        681,
+        940
+      ],
+      "customer": "B",
+      "role": "second customer experience"
+    }
+  ]
+}
+
