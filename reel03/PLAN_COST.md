@@ -35,3 +35,4 @@ Balance before Reel 03: 13,681.
 - Room master generated (65): corner majlis, navy seating on two walls, tall walnut-slat niche with carved Sadu panel and hidden glow,
   small arched niche with one brass lantern, square walnut table with a deep plinth on a cream Sadu rug, greige plaster, light from upper left.
   `references/room_master_magnific.png` — waiting for client approval before the 9 dependent stills.
+- Room v2 (65): client asked to change the colour to avoid repeating navy -> camel/sand seating, rust-terracotta Sadu cushions, warm cream plaster; geometry unchanged. room_master_magnific.png = v2 (v1 kept as room_master_v1_navy.png).
