@@ -39,3 +39,7 @@ Balance before Reel 03: 13,681.
 - 9 stills (585): P01-P08 + PLATE in the camel room; 5 boxes filled (beethoven_0708 low, side/back cut px 0); wordmarks fixed (edit/make_finals.py). Reel 03 spent so far: 715.
 - P08 (client: oud too low): placement quad back corners raised 35 px (mound rising toward the back, front at the rim), clip = same, beethoven_0708 --mirror, back 0.02; side/back cut px 0.
 - P08 v2 (client: 35 px too high on the right): back corners raised 20 px left / 10 px right — medium, even height.
+- OUD v2 (client: heap quality poor, "use the real pieces we started with, not the heap"): all five boxes refilled with
+  `edit/whole_fill.py` (only whole real cut-outs from box_masters/pieces, no heap master) + `edit/fix_specks.py`, then make_finals.
+  Seeds: P02 1 (hide l) · P03 2 (r) · P04 2 (l) · P07 1 · P08 2 with back corners raised 20/10, kf 0.02 kb 0.01 (r). Visible cut px 0 on all.
+  Previous heap versions kept in images/heap_v1/.
