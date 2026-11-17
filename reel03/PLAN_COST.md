@@ -43,3 +43,4 @@ Balance before Reel 03: 13,681.
   `edit/whole_fill.py` (only whole real cut-outs from box_masters/pieces, no heap master) + `edit/fix_specks.py`, then make_finals.
   Seeds: P02 1 (hide l) · P03 2 (r) · P04 2 (l) · P07 1 · P08 2 with back corners raised 20/10, kf 0.02 kb 0.01 (r). Visible cut px 0 on all.
   Previous heap versions kept in images/heap_v1/.
+- OUD v3 (client: pieces a bit small): --len 0.38 (was 0.30) on all five boxes, same seeds; 0.45 too soft (pieces upscaled past their source resolution).
