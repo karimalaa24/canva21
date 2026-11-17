@@ -38,3 +38,4 @@ Balance before Reel 03: 13,681.
 - Room v2 (65): client asked to change the colour to avoid repeating navy -> camel/sand seating, rust-terracotta Sadu cushions, warm cream plaster; geometry unchanged. room_master_magnific.png = v2 (v1 kept as room_master_v1_navy.png).
 - 9 stills (585): P01-P08 + PLATE in the camel room; 5 boxes filled (beethoven_0708 low, side/back cut px 0); wordmarks fixed (edit/make_finals.py). Reel 03 spent so far: 715.
 - P08 (client: oud too low): placement quad back corners raised 35 px (mound rising toward the back, front at the rim), clip = same, beethoven_0708 --mirror, back 0.02; side/back cut px 0.
+- P08 v2 (client: 35 px too high on the right): back corners raised 20 px left / 10 px right — medium, even height.
