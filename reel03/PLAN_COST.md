@@ -36,3 +36,4 @@ Balance before Reel 03: 13,681.
   small arched niche with one brass lantern, square walnut table with a deep plinth on a cream Sadu rug, greige plaster, light from upper left.
   `references/room_master_magnific.png` — waiting for client approval before the 9 dependent stills.
 - Room v2 (65): client asked to change the colour to avoid repeating navy -> camel/sand seating, rust-terracotta Sadu cushions, warm cream plaster; geometry unchanged. room_master_magnific.png = v2 (v1 kept as room_master_v1_navy.png).
+- 9 stills (585): P01-P08 + PLATE in the camel room; 5 boxes filled (beethoven_0708 low, side/back cut px 0); wordmarks fixed (edit/make_finals.py). Reel 03 spent so far: 715.
