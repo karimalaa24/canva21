@@ -29,3 +29,9 @@ Balance before Reel 03: 13,681.
 ## Notes
 - VO line 3 is recorded «أنا رايح العزيمة» (masculine); the screenshot (a woman) reads «انا رايحه لعزيمه». No caption is shown over the screenshot, so the card carries her exact words; re-record only if the client wants the feminine form.
 - The client asked for the faster ad pace (per-phrase tempo, ~0.30 s gaps) — this overrides the prompt's "never change speech speed".
+
+## Decisions
+- 17 Nov: client approved the FULL plan (Kling also for P02 close box 4 s and P04 three boxes 6 s) = 2,900 credits.
+- Room master generated (65): corner majlis, navy seating on two walls, tall walnut-slat niche with carved Sadu panel and hidden glow,
+  small arched niche with one brass lantern, square walnut table with a deep plinth on a cream Sadu rug, greige plaster, light from upper left.
+  `references/room_master_magnific.png` — waiting for client approval before the 9 dependent stills.
