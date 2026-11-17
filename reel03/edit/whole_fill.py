@@ -22,6 +22,8 @@ ap.add_argument('--squash', type=float, default=0, help='vertical squash (0 = fr
 ap.add_argument('--kf', type=float, default=0.06); ap.add_argument('--kb', type=float, default=0.035)
 ap.add_argument('--cov', type=float, default=0.05, help='stop layer 1 when this fraction of the floor is uncovered')
 ap.add_argument('--l2', type=float, default=0.25, help='second layer pieces as a fraction of layer 1')
+ap.add_argument('--exclude', default='', help='comma list of piece names to leave out (e.g. bulky A_00,B_09)')
+ap.add_argument('--maxw', type=float, default=0, help='drop pieces whose width/length ratio exceeds this (bulky)')
 ap.add_argument('--depth', type=float, default=0.85, help='floor depth / width (real box)')
 A = ap.parse_args()
 rng = random.Random(A.seed)
@@ -66,6 +68,10 @@ def lining_median(img, quad):
 kit = json.load(open(os.path.join(LIB, 'kit.json'))); light = lining_median(D, Q)
 grade = lambda c, g: np.clip(c / np.array(kit['paper_white'], np.float32) * light * g * np.array([0.86, 0.97, 1.08]), 0, 255)
 pool = load_pieces(os.path.join(LIB, 'pieces'))
+ex = [e.strip() for e in A.exclude.split(',') if e.strip()]
+pool = [p for p in pool if not any(p[0].startswith(e) for e in ex)]
+if A.maxw > 0: pool = [p for p in pool if (lambda a: (lambda ys, xs: (ys.max() - ys.min() + 1) / (xs.max() - xs.min() + 1))(*np.where(a > 0.5)))(p[2]) <= A.maxw]
+print('pieces used:', [os.path.basename(p[0]) for p in pool])
 cv = Canvas(D)
 
 def fits(aa, cx, cy):

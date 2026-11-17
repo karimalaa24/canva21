@@ -13,3 +13,4 @@
 - Scene 5 v2: right wall shows its INNER face at this angle -> fill quad right edge moved to the floor line (872,1290 / 1030,1505), seed 2.
 - Scene 5 v3: right side + gaps filled (quad right edge 878,1288 / 1040,1505, cov 0.015, l2 0, seed 2) — flat, no climb on the inner wall.
 - Scene 6 (S07): tracked oud slid against the box (client) -> re-animated in Kling from the new P04 still (6 s, straight push-in only, 540 cr). Reel 03 total: 3,505.
+- Scene 6 v3: one oversized piece (client) -> refill without the bulky cut-outs (whole_fill --exclude A_00,B_09, l2 0, cov 0.03, seed 2) and re-animated (Kling 6 s straight push, 540). Reel 03 total: 4,045.
