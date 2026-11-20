@@ -40,6 +40,7 @@ wave_out = wave.open('_raw_concat.wav', 'wb'); wave_out.setnchannels(1); wave_ou
 wave_out.writeframes((y * 32767).astype(np.int16).tobytes()); wave_out.close()
 subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-i', '_raw_concat.wav', '-af', 'atempo=1.03', '-ar', '48000', 'vo_kinam_paced.wav'], check=True)
 subprocess.run(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-i', 'vo_kinam_paced.wav', '-b:a', '192k', 'vo_kinam_paced.mp3'], check=True)
+os.remove('_raw_concat.wav')
 dur = len(y) / SR / 1.03
 json.dump({'phrases': MAP, 'duration': round(dur, 3), 'tempo': 1.03}, open('vo_kinam_map.json', 'w'), ensure_ascii=False, indent=1)
 for m in MAP: print('%2d %s %6.2f-%6.2f  %s' % (m['i'], m['take'], m['start'], m['end'], m['text']))
