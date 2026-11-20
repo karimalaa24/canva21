@@ -1,12 +1,24 @@
 {
  "scenes": [
   {
-   "scene": "S1 الإيد والقطع (1+2)",
+   "scene": "S01a التبخير (1)",
+   "clip": "S01a",
+   "src_from": 0,
    "start": 0,
+   "end": 2.47,
+   "len": 2.47,
+   "kling_s": 3,
+   "credits": 270
+  },
+  {
+   "scene": "S01b الإيد والقطع (2)",
+   "clip": "S01",
+   "src_from": "tail",
+   "start": 2.47,
    "end": 4.36,
-   "len": 4.36,
-   "kling_s": 5,
-   "credits": 450
+   "len": 1.89,
+   "kling_s": 0,
+   "credits": 0
   },
   {
    "scene": "S2 القطعة بين الصباعين (3)",
@@ -14,7 +26,9 @@
    "end": 6.64,
    "len": 2.28,
    "kling_s": 3,
-   "credits": 270
+   "credits": 270,
+   "clip": "S02",
+   "src_from": 0
   },
   {
    "scene": "S3 الجمر (4)",
@@ -22,7 +36,9 @@
    "end": 10.4,
    "len": 3.76,
    "kling_s": 5,
-   "credits": 450
+   "credits": 450,
+   "clip": "S03",
+   "src_from": 0
   },
   {
    "scene": "S4 الدخان (5)",
@@ -30,7 +46,9 @@
    "end": 12.92,
    "len": 2.52,
    "kling_s": 4,
-   "credits": 360
+   "credits": 360,
+   "clip": "S04",
+   "src_from": 0
   },
   {
    "scene": "S5 المجلس (6+7)",
@@ -38,7 +56,9 @@
    "end": 19.18,
    "len": 6.26,
    "kling_s": 7,
-   "credits": 630
+   "credits": 630,
+   "clip": "S05",
+   "src_from": 0
   },
   {
    "scene": "S6 العلبة المفتوحة (8+9)",
@@ -46,7 +66,9 @@
    "end": 24.84,
    "len": 5.66,
    "kling_s": 7,
-   "credits": 630
+   "credits": 630,
+   "clip": "S06",
+   "src_from": 0
   },
   {
    "scene": "S7 الميزان (10)",
@@ -54,7 +76,9 @@
    "end": 26.83,
    "len": 1.99,
    "kling_s": 3,
-   "credits": 270
+   "credits": 270,
+   "clip": "S07",
+   "src_from": 0
   },
   {
    "scene": "S8 الختام والخصم (11+12)",
@@ -62,9 +86,11 @@
    "end": 30.84,
    "len": 4.01,
    "kling_s": 5,
-   "credits": 450
+   "credits": 450,
+   "clip": "S08",
+   "src_from": 0
   }
  ],
- "kling_total_s": 39,
- "kling_total_credits": 3510
+ "kling_total_s": 42,
+ "kling_total_credits": 3780
 }

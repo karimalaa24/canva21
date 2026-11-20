@@ -9,12 +9,14 @@ enc = subprocess.Popen(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-f', 'rawvid
                         '-c:v', 'libx264', '-crf', '16', '-preset', 'medium', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '192k', '-af', 'apad', '-t', str(T[-1]['end']), out], stdin=subprocess.PIPE)
 N = int(round(T[-1]['end'] * FPS))
 for i, sc in enumerate(T):
-    c = cv2.VideoCapture(K + 'clips/raw/S%02d.mp4' % (i + 1)); fr = []
+    c = cv2.VideoCapture(K + 'clips/raw/%s.mp4' % sc['clip']); fr = []
     while True:
         ok, im = c.read()
         if not ok: break
         fr.append(cover(im))
     a, b = int(round(sc['start'] * FPS)), int(round(sc['end'] * FPS)) if i < len(T) - 1 else N
+    off = sc.get('src_from', 0)
+    if off == 'tail': off = max(0, len(fr) - int(np.ceil((b - a) / FPS * 24)) - 1)   # use the END of the clip (closest framing)
     for n in range(a, b):
-        k = min(int((n - a) / FPS * 24), len(fr) - 1); enc.stdin.write(fr[k].tobytes())
+        k = min(off + int((n - a) / FPS * 24), len(fr) - 1); enc.stdin.write(fr[k].tobytes())
 enc.stdin.close(); enc.wait(); print('frames', N)
