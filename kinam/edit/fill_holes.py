@@ -18,6 +18,7 @@ for i in range(1, n):
 m = cv2.dilate(out.astype(np.uint8) * 255, np.ones((7, 7), np.uint8))
 # clone real wood texture from the nearest offset whose source is all wood (looks like another piece), slightly shaded
 r = f.astype(np.float32).copy(); ys, xs = np.where(m > 0); H, W = m.shape; best = None
+if len(ys) == 0: cv2.imwrite(sys.argv[3], f); print("holes px 0"); sys.exit()
 for d in range(60, 400, 10):
     for dx, dy in [(-d, 0), (d, 0), (-d, -d // 3), (d, -d // 3), (0, -d // 2)]:
         y2, x2 = ys + dy, xs + dx
