@@ -1,13 +1,13 @@
 """Kinam gift G10 (from kinam/edit/s07b_pieces.py): empty scale pan (Magnific edit, display 4.20 g) + 3 real cut-outs laid flat, loosely, realistic size (~3.5 cm on a ~12 cm pan). Free, local.
 usage: s07b_pieces.py '[[name,len,ang,cx,cy,flip],...]' [squash]"""
-import cv2, numpy as np, json, sys
+import cv2, numpy as np, json, sys, os
 K = '/home/user/canva21/kinam/'; S = '/tmp/claude-0/-home-user-canva21/d92bd60e-9f87-52c3-ac35-11b21dbe0949/scratchpad/'
 T = json.load(open(K + 'pieces/target_kinam.json'))
 # wood tone of the scene = the AI pieces that sat on this pan before (same light)
 ai = cv2.imread(K + 'images/s07_scale_ai_pan.png'); Lai = cv2.cvtColor(ai, cv2.COLOR_BGR2LAB)[..., 0].astype(np.float32)
 ell = np.zeros(Lai.shape, np.uint8); cv2.ellipse(ell, (1050, 1945), (300, 125), 0, 0, 360, 1, -1)
 w = Lai[(ell > 0) & (ai.astype(np.float32).mean(2) < 110)]; Lmu, Lsd = w.mean(), w.std()
-out = cv2.imread('/home/user/canva21/kinam_gift/images/g10_boxed.png').astype(np.float32)
+out = cv2.imread(os.environ.get('BASE', '/home/user/canva21/kinam_gift/images/g10_boxed.png')).astype(np.float32)
 SQ = float(sys.argv[2]) if len(sys.argv) > 2 else 0.6
 def piece(name, length, ang, cx, cy, flip=False):
     global out
@@ -35,5 +35,5 @@ def piece(name, length, ang, cx, cy, flip=False):
     bounce = np.clip((yy / h - 0.4) / 0.6, 0, 1)[..., None] * np.array([0.0, 6.0, 14.0])
     reg[:] = (rgb + bounce) * a[..., None] + reg * (1 - a[..., None])
 for pc in json.loads(sys.argv[1]): piece(*pc)
-r = np.clip(out, 0, 255).astype(np.uint8); cv2.imwrite('/home/user/canva21/kinam_gift/images/g10_scale_final.png', r)
-cv2.imwrite(S + 'pan5.jpg', r[1950:2250, 850:1350])
+r = np.clip(out, 0, 255).astype(np.uint8); cv2.imwrite(os.environ.get('OUT', '/home/user/canva21/kinam_gift/images/g10_scale_final.png'), r)
+cv2.imwrite(S + 'pan5.jpg', r[1950:2250, 950:1400])
