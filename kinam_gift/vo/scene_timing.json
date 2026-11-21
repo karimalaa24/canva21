@@ -43,7 +43,7 @@
    "end": 9.63,
    "len": 2.67,
    "type": "clip",
-   "src": "clips/raw/K2_closed.mp4",
+   "src": "clips/raw/K2_closed_cleanlid.mp4",
    "offset": 0.0,
    "zoom": null
   },
@@ -103,7 +103,7 @@
    "end": 27.43,
    "len": 7.13,
    "type": "clip",
-   "src": "clips/raw/K2_closed.mp4",
+   "src": "clips/raw/K2_closed_cleanlid.mp4",
    "offset": 2.9,
    "zoom": null
   },
