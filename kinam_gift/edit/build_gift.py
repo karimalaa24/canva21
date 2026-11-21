@@ -38,7 +38,7 @@ G3MASK = None
 for sc in SC:
     p = sc['src'] if sc['src'].startswith('/') else K + sc['src']
     if sc['type'] == 'still':
-        CL[sc['scene']] = ('still', lift(cover(cv2.imread(p))), sc['zoom']); continue
+        CL[sc['scene']] = ('still', lift(cover(cv2.imread(p))), sc['zoom'], sc.get('center', (540, 960))); continue
     if p in [v[3] for v in CL.values() if v[0] == 'clip']:
         fr = [v for v in CL.values() if v[0] == 'clip' and v[3] == p][0][1]
     else:
@@ -59,13 +59,20 @@ from scipy.ndimage import binary_fill_holes
 hm = binary_fill_holes(hm).astype(np.uint8); n_, l_, st_, _ = cv2.connectedComponentsWithStats(hm)
 hm = (l_ == max(range(1, n_), key=lambda i: st_[i, 4])).astype(np.uint8)
 G3MASK = cv2.GaussianBlur(cv2.dilate(hm, np.ones((9, 9), np.uint8)).astype(np.float32), (0, 0), 4)[..., None]
-def warp_zoom(im, s):
-    M = np.float32([[s, 0, 540 - s * 540], [0, s, 960 - s * 960]]); return cv2.warpAffine(im, M, (W, H), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT)
+def warp_zoom(im, s, c=(540, 960)):
+    cx, cy = c; M = np.float32([[s, 0, cx - s * cx + (540 - cx) * (s - 1) / s * 0 ], [0, s, cy - s * cy]]); return cv2.warpAffine(im, M, (W, H), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REFLECT)
 def base_frame(t):
     sc = [s for s in SC if s['start'] <= t + 1e-6 < s['end'] + 1e-6][0]; v = CL[sc['scene']]; u = (t - sc['start']) / (sc['end'] - sc['start'])
     if v[0] == 'still':
-        z0, z1 = v[2]; return warp_zoom(v[1], z0 + (z1 - z0) * (u * u * (3 - 2 * u)))
-    fr = v[1]; f = fr[min(int((v[2] + t - sc['start']) * 24), len(fr) - 1)]
+        z0, z1 = v[2]; return warp_zoom(v[1], z0 + (z1 - z0) * (u * u * (3 - 2 * u)), v[3])
+    fr = v[1]; e = t - sc['start']
+    if sc.get('segs'):     # cut on action: play the listed source windows back to back (hides a bad middle section)
+        for a_, b_ in sc['segs']:
+            ln = min(b_, len(fr) / 24) - a_
+            if e < ln or (a_, b_) == tuple(sc['segs'][-1]): src_t = a_ + e; break
+            e -= ln
+    else: src_t = v[2] + e
+    f = fr[min(int(src_t * 24), len(fr) - 1)]
     if sc['scene'].startswith('G3'):
         f = np.clip(g3still * G3MASK + f * (1 - G3MASK), 0, 255).astype(np.uint8)
     return f
@@ -177,11 +184,11 @@ if os.environ.get('SAMPLE'):
     while len(tiles) % 6: tiles.append(np.zeros_like(tiles[0]))
     cv2.imwrite(OUT, np.vstack([np.hstack(tiles[i:i + 6]) for i in range(0, len(tiles), 6)])); sys.exit()
 # ---------------- render ----------------
-N = int(round(END * FPS))
+N = int(round(END * FPS)); N0 = int(float(os.environ.get('T0', 0)) * FPS); N = int(float(os.environ['T1']) * FPS) if os.environ.get('T1') else N
 enc = subprocess.Popen(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS), '-i', '-',
-                        '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-crf', '16', '-preset', 'slow', '-pix_fmt', 'yuv420p',
-                        '-c:a', 'aac', '-b:a', '192k', '-af', f'apad=whole_dur={END}', '-t', str(END), '-movflags', '+faststart', OUT], stdin=subprocess.PIPE)
-for n in range(N):
+                        '-ss', str(N0 / FPS), '-i', AUDIO, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-crf', '16', '-preset', 'slow', '-pix_fmt', 'yuv420p',
+                        '-c:a', 'aac', '-b:a', '192k', '-af', f'apad=whole_dur={END}', '-t', str((N - N0) / FPS), '-movflags', '+faststart', OUT], stdin=subprocess.PIPE)
+for n in range(N0, N):
     t = n / FPS; fr = cv2.cvtColor(base_frame(t), cv2.COLOR_BGR2RGB).astype(np.float32)
     if not CLEAN: draw_captions(fr, t); draw_graphics(fr, t)
     enc.stdin.write(np.clip(fr, 0, 255).astype(np.uint8).tobytes())
