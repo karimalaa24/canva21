@@ -1,7 +1,7 @@
 """Kinam final builder (frame-indexed, real Kling frames 24->30 by frame picking, product light lift).
 usage: build_kinam.py out.mp4 --audio mix.wav [--clean]
 Timeline = vo/scene_timing.json (cuts at the middle of the VO gaps) ; captions = two-line white + gold, line 2 appears on its word.
-Graphics (S8): discount badge on «خصم», tabby + tamara pop, pop SFX times written to edit/pop_times.json (used by make_mixes_kinam.py)."""
+Graphics (S8): discount badge on «خصم» (client: no tabby/tamara), pop SFX times written to edit/pop_times.json (used by make_mixes_kinam.py)."""
 import cv2, numpy as np, subprocess, sys, json, wave
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 K = '/home/user/canva21/kinam/'; FONT = '/home/user/canva21/oud-fix5/fonts/Almarai-ExtraBold.ttf'; LOGOS = '/home/user/canva21/.claude/skills/product-ad-fidelity/assets/'
@@ -125,11 +125,10 @@ def pop_in(fr, im, cx, cy, t0, t, t1=99, s0=0.35):
     k = (t - t0) / 0.40; a = ss(k * 2.2) * (1 - ss((t - (t1 - 0.15)) / 0.15)) if t1 < 90 else ss(k * 2.2)
     h, w_ = im.shape[:2]; paste(fr, im, int(cx - w_ / 2), int(cy - h / 2), a, s0 + (1 - s0) * ease_back(k))
 t_disc = onset(11, 'وعليه', 'وعليه خصم قوي الحين') - 0.05
-POPS = {'discount': round(t_disc, 2), 'tabby': round(PH[11]['end'] + 0.10, 2), 'tamara': round(PH[11]['end'] + 0.45, 2)}
+POPS = {'discount': round(t_disc, 2)}   # client: no tabby / tamara in this ad
 json.dump(POPS, open(K + 'edit/pop_times.json', 'w'), indent=1)
 def draw_graphics(fr, t):
     pop_in(fr, DISC, 540, 1440, POPS['discount'], t, s0=0.25)
-    pop_in(fr, TABBY, 735, 1655, POPS['tabby'], t); pop_in(fr, TAMARA, 345, 1655, POPS['tamara'], t)
 
 # ---------------- render ----------------
 N = int(round(END * FPS))
