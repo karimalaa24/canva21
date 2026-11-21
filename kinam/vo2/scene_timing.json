@@ -1,0 +1,84 @@
+{
+ "scenes": [
+  {
+   "scene": "S01a التبخير",
+   "clip": "S01a",
+   "src_from": 0,
+   "start": 0,
+   "end": 2.41,
+   "len": 2.41
+  },
+  {
+   "scene": "S01b الإيد والقطع",
+   "clip": "S01",
+   "src_from": "tail",
+   "start": 2.41,
+   "end": 4.32,
+   "len": 1.91
+  },
+  {
+   "scene": "S2 القطعة",
+   "clip": "S02",
+   "src_from": 0,
+   "start": 4.32,
+   "end": 6.54,
+   "len": 2.22
+  },
+  {
+   "scene": "S3 الجمر",
+   "clip": "S03",
+   "src_from": 0,
+   "start": 6.54,
+   "end": 10.38,
+   "len": 3.84
+  },
+  {
+   "scene": "S4 الدخان",
+   "clip": "S04",
+   "src_from": 0,
+   "start": 10.38,
+   "end": 13.11,
+   "len": 2.73
+  },
+  {
+   "scene": "S5 المجلس",
+   "clip": "S05",
+   "src_from": 0,
+   "start": 13.11,
+   "end": 19.46,
+   "len": 6.35
+  },
+  {
+   "scene": "S6 العلبة المفتوحة",
+   "clip": "S06",
+   "src_from": 0,
+   "start": 19.46,
+   "end": 25.45,
+   "len": 5.99
+  },
+  {
+   "scene": "S7 الميزان",
+   "clip": "S07",
+   "src_from": 0,
+   "start": 25.45,
+   "end": 27.53,
+   "len": 2.08
+  },
+  {
+   "scene": "S9 الضمان الذهبي",
+   "clip": "S09",
+   "src_from": 0,
+   "start": 27.53,
+   "end": 35.22,
+   "len": 7.69
+  },
+  {
+   "scene": "S8 الختام",
+   "clip": "S08",
+   "src_from": 0,
+   "start": 35.22,
+   "end": 39.84,
+   "len": 4.62
+  }
+ ]
+}
