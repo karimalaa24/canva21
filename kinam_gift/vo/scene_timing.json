@@ -1,0 +1,100 @@
+{
+ "scenes": [
+  {
+   "scene": "G1 هدية بتتسلّم (جديد)",
+   "clip": "NEW_G1",
+   "src_from": 0,
+   "start": 0,
+   "end": 2.91,
+   "len": 2.91
+  },
+  {
+   "scene": "G2 العلبة المفتوحة",
+   "clip": "S06",
+   "src_from": 0,
+   "start": 2.91,
+   "end": 4.98,
+   "len": 2.07
+  },
+  {
+   "scene": "G3 الإيد بالقطع",
+   "clip": "S01",
+   "src_from": "tail",
+   "start": 4.98,
+   "end": 6.96,
+   "len": 1.98
+  },
+  {
+   "scene": "G4 العلبة بشريطة الهدية (جديد)",
+   "clip": "NEW_G4",
+   "src_from": 0,
+   "start": 6.96,
+   "end": 9.63,
+   "len": 2.67
+  },
+  {
+   "scene": "G5 فتح العلبة (جديد)",
+   "clip": "NEW_G5",
+   "src_from": 0,
+   "start": 9.63,
+   "end": 10.87,
+   "len": 1.24
+  },
+  {
+   "scene": "G6 القطعة بين الصباعين",
+   "clip": "S02",
+   "src_from": 0,
+   "start": 10.87,
+   "end": 13.72,
+   "len": 2.85
+  },
+  {
+   "scene": "G7 الجمر",
+   "clip": "S03",
+   "src_from": 0,
+   "start": 13.72,
+   "end": 16.99,
+   "len": 3.27
+  },
+  {
+   "scene": "G8 الدخان",
+   "clip": "S04",
+   "src_from": 0,
+   "start": 16.99,
+   "end": 20.3,
+   "len": 3.31
+  },
+  {
+   "scene": "G9 المجلس + الضمان الذهبي",
+   "clip": "S05",
+   "src_from": 0,
+   "start": 20.3,
+   "end": 27.43,
+   "len": 7.13
+  },
+  {
+   "scene": "G10 الميزان",
+   "clip": "S07",
+   "src_from": 0,
+   "start": 27.43,
+   "end": 29.16,
+   "len": 1.73
+  },
+  {
+   "scene": "G11 العلبة + تابي وتمارا",
+   "clip": "S06",
+   "src_from": "tail",
+   "start": 29.16,
+   "end": 31.72,
+   "len": 2.56
+  },
+  {
+   "scene": "G12 الختام + الخصم",
+   "clip": "S08",
+   "src_from": 0,
+   "start": 31.72,
+   "end": 37.74,
+   "len": 6.02
+  }
+ ]
+}
