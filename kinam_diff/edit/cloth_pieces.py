@@ -7,14 +7,17 @@ P = sorted(glob.glob(K + 'pieces/pieces_white_bg_*.png'))
 # (piece index, centre x, centre y, length px, angle)  -- loose, hand-placed look, more space at the top for captions
 import sys
 rng = np.random.default_rng(int(sys.argv[1]) if len(sys.argv) > 1 else 7)
-# dense loose spread: ~30 real pieces (each of the 9 cut-outs used 3-4 times, rotated / flipped / resized so no two look alike)
-LAY = []; pts = []
-for k in range(400):
-    if len(LAY) >= 32: break
-    x, y = rng.uniform(260, 1280), rng.uniform(520, 2480); L = rng.uniform(230, 360)
-    if any(np.hypot(x - px, y - py) < 0.62 * (L + pl) / 2 for px, py, pl in pts): continue
-    pts.append((x, y, L)); LAY.append((len(LAY) % 9, x, y, L, rng.uniform(-180, 180), bool(rng.random() < 0.5)))
-def piece(i, cx, cy, L, ang, flip=False):
+# WHOLESALE HEAP: hundreds of real pieces piled on top of each other, mound higher in the middle (more layers there),
+# lower layers darker (depth), every piece one of the 9 real cut-outs, rotated / flipped / resized.
+LAY = []
+CX, CY, RX, RY = 770, 1500, 640, 1080
+for layer in range(5):
+    n = [260, 200, 150, 100, 60][layer]
+    for k in range(n):
+        t, r = rng.uniform(0, 2 * np.pi), np.sqrt(rng.uniform(0, 1)) * (1.0 - 0.15 * layer)
+        x, y = CX + r * RX * np.cos(t), CY + r * RY * np.sin(t)
+        LAY.append((int(rng.integers(9)), x, y, rng.uniform(150, 270), rng.uniform(-180, 180), bool(rng.random() < 0.5), layer))
+def piece(i, cx, cy, L, ang, flip=False, layer=4):
     global out
     p = cv2.imread(P[i], -1); hs = cv2.cvtColor(p[..., :3], cv2.COLOR_BGR2HSV).astype(int)
     a0 = (p[..., 3] > 128).astype(np.uint8); rim = (a0 > 0) & (cv2.erode(a0, np.ones((17, 17), np.uint8)) == 0)
@@ -32,12 +35,12 @@ def piece(i, cx, cy, L, ang, flip=False):
     a = cv2.GaussianBlur(cv2.erode(c[..., 3].astype(np.float32) / 255, np.ones((3, 3), np.uint8)), (0, 0), 0.7)
     lab = cv2.cvtColor(c[..., :3], cv2.COLOR_BGR2LAB).astype(np.float32); sel = a > 0.9
     bright = lab[..., 0] > np.percentile(lab[..., 0][sel], 97); a[bright & (a < 0.98)] *= 0.3
-    Lp = lab[..., 0]; Lp = np.minimum(Lp, np.percentile(Lp[sel], 96)); Lp = (Lp - Lp[sel].mean()) / (Lp[sel].std() + 1e-3) * 28 + 70
+    Lp = lab[..., 0]; Lp = np.minimum(Lp, np.percentile(Lp[sel], 96)); Lp = (Lp - Lp[sel].mean()) / (Lp[sel].std() + 1e-3) * 30 + 76 * (0.62 + 0.095 * layer)
     yy, xx = np.mgrid[0:D, 0:D]; Lp = Lp * (1.12 - 0.22 * (0.5 * yy / D + 0.5 * xx / D))
     edge = np.clip(a - np.roll(a, -4, 0), 0, 1); Lp *= 1 - 0.45 * cv2.GaussianBlur(edge, (0, 0), 1.2)
     lab[..., 0] = np.clip(Lp, 0, 255); Lm = lab[..., 0][sel].mean()
     for ch, key in ((1, 'a_of_L'), (2, 'b_of_L')):
-        own = lab[..., ch]; lab[..., ch] = (own - own[sel].mean()) * 1.25 + T[key][0] * Lm + T[key][1] + 3
+        own = lab[..., ch]; lab[..., ch] = (own - own[sel].mean()) * 1.25 + T[key][0] * Lm + T[key][1] + (2 if ch == 1 else 9)
     rgb = cv2.cvtColor(np.clip(lab, 0, 255).astype(np.uint8), cv2.COLOR_LAB2BGR).astype(np.float32)
     rgb = rgb + 0.35 * (rgb - cv2.GaussianBlur(rgb, (0, 0), 1.2))
     X, Y = int(cx - D / 2), int(cy - D / 2)
@@ -45,7 +48,7 @@ def piece(i, cx, cy, L, ang, flip=False):
     reg = out[Y:Y + D, X:X + D]
     soft = cv2.warpAffine(cv2.GaussianBlur(a, (0, 0), 14), np.float32([[1, 0, 14], [0, 1, 18]]), (D, D))
     cont = cv2.warpAffine(cv2.GaussianBlur(a, (0, 0), 3), np.float32([[1, 0, 3], [0, 1, 4]]), (D, D))
-    reg *= (1 - 0.55 * soft[..., None]) * (1 - 0.5 * cont[..., None] * (1 - a[..., None]))
+    reg *= (1 - 0.65 * soft[..., None]) * (1 - 0.5 * cont[..., None] * (1 - a[..., None]))
     reg[:] = rgb * a[..., None] + reg * (1 - a[..., None])
 for args in LAY: piece(*args)
 cv2.imwrite('/home/user/canva21/kinam_diff/images/d03_pieces_final.png', np.clip(out, 0, 255).astype(np.uint8))
