@@ -11,12 +11,19 @@
   },
   {
    "scene": "D2 الكومة",
-   "type": "clip",
-   "src": "clips/D2_heap.mp4",
+   "type": "still",
+   "src": "images/d03_pieces_final.png",
    "offset": 0.0,
-   "zoom": null,
+   "zoom": [
+    1.0,
+    1.5
+   ],
    "start": 2.79,
-   "end": 7.99
+   "end": 7.99,
+   "center": [
+    541,
+    1048
+   ]
   },
   {
    "scene": "D3 القطعة",
@@ -72,20 +79,34 @@
   {
    "scene": "D8 الضمان",
    "type": "clip",
-   "src": "clips/D8_guar.mp4",
-   "offset": 0.0,
+   "src": "clips/D7_night.mp4",
+   "offset": 1.6,
    "zoom": null,
    "start": 32.58,
-   "end": 39.35
+   "end": 39.35,
+   "speed": 0.5,
+   "push": [
+    1.0,
+    1.3,
+    492,
+    1273
+   ]
   },
   {
    "scene": "D9 الميزان",
-   "type": "clip",
-   "src": "clips/D9_scale.mp4",
+   "type": "still",
+   "src": "images/d09_scale_final.png",
    "offset": 0.0,
-   "zoom": null,
+   "zoom": [
+    1.0,
+    1.15
+   ],
    "start": 39.35,
-   "end": 43.81
+   "end": 43.81,
+   "center": [
+    598,
+    1399
+   ]
   },
   {
    "scene": "D10 الختام",

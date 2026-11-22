@@ -70,6 +70,8 @@ def base_frame(t):
         if k > 0:
             day = warp_zoom(XF[sc['scene']], 1.0 + 0.03 * max(0, e - x['at']) / 3)
             f = np.clip(f.astype(np.float32) * (1 - k) + day.astype(np.float32) * k, 0, 255).astype(np.uint8)
+    if sc.get('push'):   # free local camera move on top of a locked Kling clip
+        z0, z1, cx, cy = sc['push']; uu = u * u * (3 - 2 * u); f = warp_zoom(f, z0 + (z1 - z0) * uu, (cx, cy))
     return f
 
 # ---------------- word onset of caption line 2: VO energy dip nearest to the proportional estimate ----------------
