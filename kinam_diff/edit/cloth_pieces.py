@@ -5,9 +5,16 @@ K = '/home/user/canva21/kinam/'; T = json.load(open(K + 'pieces/target_kinam.jso
 out = cv2.imread('/home/user/canva21/kinam_diff/images/d03_cloth_empty.png').astype(np.float32); H, W = out.shape[:2]
 P = sorted(glob.glob(K + 'pieces/pieces_white_bg_*.png'))
 # (piece index, centre x, centre y, length px, angle)  -- loose, hand-placed look, more space at the top for captions
-LAY = [(0, 560, 760, 430, -18), (1, 1040, 820, 400, 22), (2, 760, 1180, 300, 8), (3, 470, 1500, 420, -30), (4, 1060, 1420, 380, 35),
-       (5, 700, 1880, 400, -8), (6, 1120, 1960, 300, 60), (7, 480, 2240, 300, 15), (8, 980, 2350, 400, -24)]
-def piece(i, cx, cy, L, ang):
+import sys
+rng = np.random.default_rng(int(sys.argv[1]) if len(sys.argv) > 1 else 7)
+# dense loose spread: ~30 real pieces (each of the 9 cut-outs used 3-4 times, rotated / flipped / resized so no two look alike)
+LAY = []; pts = []
+for k in range(400):
+    if len(LAY) >= 32: break
+    x, y = rng.uniform(260, 1280), rng.uniform(520, 2480); L = rng.uniform(230, 360)
+    if any(np.hypot(x - px, y - py) < 0.62 * (L + pl) / 2 for px, py, pl in pts): continue
+    pts.append((x, y, L)); LAY.append((len(LAY) % 9, x, y, L, rng.uniform(-180, 180), bool(rng.random() < 0.5)))
+def piece(i, cx, cy, L, ang, flip=False):
     global out
     p = cv2.imread(P[i], -1); hs = cv2.cvtColor(p[..., :3], cv2.COLOR_BGR2HSV).astype(int)
     a0 = (p[..., 3] > 128).astype(np.uint8); rim = (a0 > 0) & (cv2.erode(a0, np.ones((17, 17), np.uint8)) == 0)
@@ -17,6 +24,7 @@ def piece(i, cx, cy, L, ang):
     keep = cv2.morphologyEx((al > 128).astype(np.uint8), cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
     n, l, st, _ = cv2.connectedComponentsWithStats(keep); keep = (l == max(range(1, n), key=lambda k: st[k, 4])).astype(np.uint8)
     p[..., 3] = (cv2.GaussianBlur(keep.astype(np.float32), (0, 0), 0.8) * 255).astype(np.uint8)
+    if flip: p = p[:, ::-1].copy()
     h, w = p.shape[:2]; s = L / max(h, w)
     p = cv2.resize(p, (int(w * s), int(h * s)), interpolation=cv2.INTER_CUBIC); h, w = p.shape[:2]
     D = int(np.hypot(h, w)) + 40; c = np.zeros((D, D, 4), np.uint8); c[(D - h) // 2:(D - h) // 2 + h, (D - w) // 2:(D - w) // 2 + w] = p
@@ -32,7 +40,9 @@ def piece(i, cx, cy, L, ang):
         own = lab[..., ch]; lab[..., ch] = (own - own[sel].mean()) * 1.25 + T[key][0] * Lm + T[key][1] + 3
     rgb = cv2.cvtColor(np.clip(lab, 0, 255).astype(np.uint8), cv2.COLOR_LAB2BGR).astype(np.float32)
     rgb = rgb + 0.35 * (rgb - cv2.GaussianBlur(rgb, (0, 0), 1.2))
-    X, Y = int(cx - D / 2), int(cy - D / 2); reg = out[Y:Y + D, X:X + D]
+    X, Y = int(cx - D / 2), int(cy - D / 2)
+    if X < 0 or Y < 0 or X + D > W or Y + D > H: return
+    reg = out[Y:Y + D, X:X + D]
     soft = cv2.warpAffine(cv2.GaussianBlur(a, (0, 0), 14), np.float32([[1, 0, 14], [0, 1, 18]]), (D, D))
     cont = cv2.warpAffine(cv2.GaussianBlur(a, (0, 0), 3), np.float32([[1, 0, 3], [0, 1, 4]]), (D, D))
     reg *= (1 - 0.55 * soft[..., None]) * (1 - 0.5 * cont[..., None] * (1 - a[..., None]))
