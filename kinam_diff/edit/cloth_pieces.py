@@ -3,7 +3,7 @@ light from the upper left, contact + soft shadows, colour toward the Kinam targe
 import cv2, numpy as np, json, glob, random
 K = '/home/user/canva21/kinam/'; T = json.load(open(K + 'pieces/target_kinam.json'))
 out = cv2.imread('/home/user/canva21/kinam_diff/images/d03_cloth_empty.png').astype(np.float32); H, W = out.shape[:2]
-P = sorted(glob.glob(K + 'pieces/pieces_white_bg_*.png'))
+P = sorted(glob.glob(K + 'pieces/pieces_white_bg_*.png')) + sorted(glob.glob(K + 'pieces_gen/gen_pieces_white_*.png'))   # 9 real + 18 generated look-alikes
 # (piece index, centre x, centre y, length px, angle)  -- loose, hand-placed look, more space at the top for captions
 import sys
 rng = np.random.default_rng(int(sys.argv[1]) if len(sys.argv) > 1 else 7)
@@ -16,7 +16,7 @@ for layer in range(5):
     for k in range(n):
         t, r = rng.uniform(0, 2 * np.pi), np.sqrt(rng.uniform(0, 1)) * (1.0 - 0.15 * layer)
         x, y = CX + r * RX * np.cos(t), CY + r * RY * np.sin(t)
-        LAY.append((int(rng.integers(9)), x, y, rng.uniform(150, 270), rng.uniform(-180, 180), bool(rng.random() < 0.5), layer))
+        LAY.append((int(rng.integers(len(P))), x, y, rng.uniform(150, 270), rng.uniform(-180, 180), bool(rng.random() < 0.5), layer))
 def piece(i, cx, cy, L, ang, flip=False, layer=4):
     global out
     p = cv2.imread(P[i], -1); hs = cv2.cvtColor(p[..., :3], cv2.COLOR_BGR2HSV).astype(int)
