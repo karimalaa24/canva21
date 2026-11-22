@@ -1,0 +1,100 @@
+{
+ "scenes": [
+  {
+   "scene": "D1 الافتتاحية",
+   "type": "clip",
+   "src": "clips/D1_hook.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 0,
+   "end": 2.79
+  },
+  {
+   "scene": "D2 الكومة",
+   "type": "clip",
+   "src": "clips/D2_heap.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 2.79,
+   "end": 7.99
+  },
+  {
+   "scene": "D3 القطعة",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam/clips/raw/S02.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 7.99,
+   "end": 10.32
+  },
+  {
+   "scene": "D4 العلبة",
+   "type": "clip",
+   "src": "clips/D4_hero.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 10.32,
+   "end": 16.1
+  },
+  {
+   "scene": "D5 الجمر",
+   "type": "clip",
+   "src": "clips/D5_ember.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 16.1,
+   "end": 22.28
+  },
+  {
+   "scene": "D6 الدخان",
+   "type": "clip",
+   "src": "clips/D6_smoke.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 22.28,
+   "end": 28.39,
+   "speed": 0.75
+  },
+  {
+   "scene": "D7 الليل والصبح",
+   "type": "clip",
+   "src": "clips/D7_night.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 28.39,
+   "end": 32.58,
+   "xfade": {
+    "still": "images/d07_day_v2_final.png",
+    "at": 1.5,
+    "dur": 1.1
+   }
+  },
+  {
+   "scene": "D8 الضمان",
+   "type": "clip",
+   "src": "clips/D8_guar.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 32.58,
+   "end": 39.35
+  },
+  {
+   "scene": "D9 الميزان",
+   "type": "clip",
+   "src": "clips/D9_scale.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 39.35,
+   "end": 43.81
+  },
+  {
+   "scene": "D10 الختام",
+   "type": "clip",
+   "src": "clips/D10_final.mp4",
+   "offset": 0.0,
+   "zoom": null,
+   "start": 43.81,
+   "end": 48.59
+  }
+ ]
+}
