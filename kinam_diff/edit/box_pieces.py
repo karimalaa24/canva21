@@ -36,18 +36,20 @@ def piece(name, length, ang, cx, cy, flip):
     cont = cv2.warpAffine(cv2.GaussianBlur(a, (0, 0), 2.5), np.float32([[1, 0, 2], [0, 1, 4]]), (w, h))
     reg *= (1 - 0.6 * cont[..., None] * (1 - a[..., None]))
     reg[:] = rgb * a[..., None] + reg * (1 - a[..., None]); cov[Y0:Y0 + h, X0:X0 + w] = np.maximum(cov[Y0:Y0 + h, X0:X0 + w], a)
-rows = [1918, 1936, 1954, 1972, 1990]
+import os
+LEN = [float(v) for v in os.environ.get('LEN', '88,112').split(',')]; FL = [float(v) for v in os.environ.get('FLEN', '80,100').split(',')]
+rows = [float(v) for v in os.environ.get('ROWS', '1918,1936,1954,1972,1990').split(',')]; NPR = [int(v) for v in os.environ.get('NPR', '4,4,5,5,5').split(',')]
 for li, ry in enumerate(rows):
     xl = 553 + (ry - 1912) * 0.55; xr = 813 + (ry - 1906) * 0.69
-    n = 4 if li < 2 else 5
+    n = NPR[li]
     for j in range(n):
         cx = xl + (j + rng.uniform(0.2, 0.8)) * (xr - xl) / n; cy = ry + rng.uniform(-5, 5)
-        piece(random.choice(IDS), rng.uniform(88, 112), rng.uniform(-35, 35), cx, cy, rng.random() < 0.5)
+        piece(random.choice(IDS), rng.uniform(*LEN), rng.uniform(-35, 35), cx, cy, rng.random() < 0.5)
 # gap filler pass: drop extra pieces where the floor still shows
 for _ in range(25):
     hole = (floor > 0) & (cov < 0.5); ys, xs = np.where(hole)
     if len(ys) < 150: break
-    k = rng.integers(len(ys)); piece(random.choice(IDS), rng.uniform(80, 100), rng.uniform(-35, 35), xs[k], ys[k] + 4, rng.random() < 0.5)
+    k = rng.integers(len(ys)); piece(random.choice(IDS), rng.uniform(*FL), rng.uniform(-35, 35), xs[k], ys[k] + 4, rng.random() < 0.5)
 d = cv2.distanceTransform((clip > 0).astype(np.uint8), cv2.DIST_L2, 5); acc *= (0.72 + 0.28 * np.clip(d / 22, 0, 1))[..., None]   # wall shade
 keep = np.maximum(floor, cov) * clip; A = cv2.GaussianBlur(keep, (0, 0), 0.7)[..., None]
 out = out * (1 - A) + acc * A
