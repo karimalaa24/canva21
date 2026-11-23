@@ -1,4 +1,5 @@
 """Kinam VO: best phrase from two Lahajati takes (A = _4, B = _2), loudness-matched, paced (gaps 0.32 s, 0.40 s at key cuts), speech x1.03.
+# NOTE: after this script, "ممكن" (30.09-30.52 s) was cut from vo_diff_paced.wav by hand (gap moved to the pause before phrase 13); original kept as vo_diff_paced_with_mumkin.wav
 Writes vo_diff_paced.wav + vo_diff_map.json (phrase -> out start/end). Phrases 4, 6, 8 hold the 3 words to re-voice (can be swapped via REPL dict)."""
 import json, subprocess, numpy as np, wave, os, sys
 SR = 48000
