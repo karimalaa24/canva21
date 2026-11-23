@@ -65,13 +65,13 @@
   {
    "scene": "D7 الليل والصبح",
    "type": "clip",
-   "src": "clips/D7_night.mp4",
+   "src": "clips/D7_night_fixed.mp4",
    "offset": 0.0,
    "zoom": null,
    "start": 28.39,
    "end": 32.58,
    "xfade": {
-    "still": "images/d07_day_v2_final.png",
+    "still": "images/d07_day_v3_final.png",
     "at": 1.5,
     "dur": 1.1
    }
@@ -79,7 +79,7 @@
   {
    "scene": "D8 الضمان",
    "type": "clip",
-   "src": "clips/D7_night.mp4",
+   "src": "clips/D7_night_fixed.mp4",
    "offset": 1.6,
    "zoom": null,
    "start": 32.58,
