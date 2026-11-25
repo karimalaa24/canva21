@@ -1,0 +1,118 @@
+{
+ "scenes": [
+  {
+   "scene": "G1 العلبة",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam_diff/clips/D4_hero.mp4",
+   "offset": 0.0,
+   "start": 0,
+   "end": 3.36,
+   "zoom": null
+  },
+  {
+   "scene": "G2 الكارت",
+   "type": "still",
+   "src": "images/g01_card_final.png",
+   "zoom": [
+    1.0,
+    1.1
+   ],
+   "center": [
+    601,
+    1188
+   ],
+   "start": 3.36,
+   "end": 8.23,
+   "offset": 0.0
+  },
+  {
+   "scene": "G3 الضمان الذهبي",
+   "type": "still",
+   "src": "images/g01_card_final.png",
+   "zoom": [
+    1.4,
+    1.52
+   ],
+   "center": [
+    990,
+    1230
+   ],
+   "start": 8.23,
+   "end": 11.22,
+   "sweep": [
+    0.25,
+    1.6
+   ],
+   "offset": 0.0
+  },
+  {
+   "scene": "G4 الكومة",
+   "type": "still",
+   "src": "/home/user/canva21/kinam_diff/images/d03_pieces_final.png",
+   "zoom": [
+    1.0,
+    1.35
+   ],
+   "center": [
+    541,
+    1048
+   ],
+   "start": 11.22,
+   "end": 13.94,
+   "offset": 0.0
+  },
+  {
+   "scene": "G5 القطعة",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam/clips/raw/S02.mp4",
+   "offset": 0.6,
+   "start": 13.94,
+   "end": 15.74,
+   "zoom": null
+  },
+  {
+   "scene": "G6 الجمر",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam_diff/clips/D5_ember.mp4",
+   "offset": 0.0,
+   "start": 15.74,
+   "end": 18.55,
+   "zoom": null
+  },
+  {
+   "scene": "G7 الدخان",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam_diff/clips/D6_smoke_lid.mp4",
+   "offset": 0.0,
+   "speed": 0.75,
+   "start": 18.55,
+   "end": 20.95,
+   "zoom": null
+  },
+  {
+   "scene": "G8 الميزان",
+   "type": "still",
+   "src": "/home/user/canva21/kinam_diff/images/d09_scale_final.png",
+   "zoom": [
+    1.0,
+    1.15
+   ],
+   "center": [
+    598,
+    1399
+   ],
+   "start": 20.95,
+   "end": 25.36,
+   "offset": 0.0
+  },
+  {
+   "scene": "G9 الختام",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam_diff/clips/D10_final.mp4",
+   "offset": 0.0,
+   "start": 25.36,
+   "end": 30.2,
+   "zoom": null
+  }
+ ]
+}
