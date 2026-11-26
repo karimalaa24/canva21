@@ -53,14 +53,14 @@
   {
    "scene": "M5 العلبة",
    "type": "still",
-   "src": "images/m05_box_final.png",
+   "src": "images/m06_corner_crop.png",
    "zoom": [
     1.0,
-    1.14
+    1.1
    ],
    "center": [
-    570,
-    1130
+    560,
+    1150
    ],
    "start": 8.68,
    "end": 11.62,
@@ -158,14 +158,14 @@
   {
    "scene": "M13 الضمان",
    "type": "still",
-   "src": "images/g01_card_majlis.png",
+   "src": "images/m07_corner_card_crop.png",
    "zoom": [
-    1.3,
-    1.45
+    1.0,
+    1.1
    ],
    "center": [
-    800,
-    1350
+    540,
+    1080
    ],
    "start": 25.95,
    "end": 29.52,
@@ -178,14 +178,14 @@
   {
    "scene": "M14 الختام",
    "type": "still",
-   "src": "images/m05_box_final.png",
+   "src": "images/m06_corner_final.png",
    "zoom": [
-    1.16,
-    1.0
+    1.0,
+    1.08
    ],
    "center": [
-    570,
-    1130
+    720,
+    1240
    ],
    "start": 29.52,
    "end": 33.67,

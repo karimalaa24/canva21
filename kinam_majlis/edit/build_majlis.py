@@ -49,10 +49,10 @@ for sc in SC:
             fr.append(lift(cover(im)))
     CL[sc['scene']] = ('clip', fr, sc['offset'], p)
 # card foil mask + sweep coordinate (cover space) for the guarantee card
-_c = lift(cover(cv2.imread('/home/user/canva21/kinam_guar/images/g01_card_final.png'))).astype(np.float32); _w = _c[..., 2] - _c[..., 0]
-_card = np.zeros((H, W), np.uint8); cv2.fillPoly(_card, [(np.float32([[944, 1398], [1336, 1382], [1412, 2048], [998, 2094]]) * (1080 / 1536) - [0, 7]).astype(np.int32)], 1)
+_c = lift(cover(cv2.imread(K + 'images/m07_corner_card_crop.png'))).astype(np.float32); _w = _c[..., 2] - _c[..., 0]
+_card = np.zeros((H, W), np.uint8); cv2.fillPoly(_card, [np.float32([[176, 521], [441, 554], [387, 998], [111, 942]]).astype(np.int32)], 1)
 FOIL = cv2.GaussianBlur(np.clip((_w - 40) / 60, 0, 1) * np.clip((_c.mean(2) - 70) / 60, 0, 1) * _card, (0, 0), 0.8)
-_yy, _xx = np.mgrid[0:H, 0:W]; SWX = ((_xx - 690) + 0.45 * (_yy - 1000)) / 500.0
+_yy, _xx = np.mgrid[0:H, 0:W]; SWX = ((_xx - 280) + 0.45 * (_yy - 755)) / 330.0
 XF = {}
 for sc in SC:
     if sc.get('xfade'): XF[sc['scene']] = lift(cover(cv2.imread(K + sc['xfade']['still'])))
