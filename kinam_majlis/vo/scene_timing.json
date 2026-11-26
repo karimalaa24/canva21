@@ -1,0 +1,195 @@
+{
+ "scenes": [
+  {
+   "scene": "M1 المجلس",
+   "type": "clip",
+   "src": "clips/M1_majlis.mp4",
+   "offset": 0.0,
+   "start": 0,
+   "end": 3.83,
+   "zoom": null
+  },
+  {
+   "scene": "M2 الباب",
+   "type": "still",
+   "src": "images/m02_door_final.png",
+   "zoom": [
+    1.0,
+    1.12
+   ],
+   "center": [
+    560,
+    1050
+   ],
+   "start": 3.83,
+   "end": 5.25,
+   "offset": 0.0
+  },
+  {
+   "scene": "M3 القهوة",
+   "type": "still",
+   "src": "images/m03_coffee_final.png",
+   "zoom": [
+    1.0,
+    1.1
+   ],
+   "center": [
+    640,
+    1250
+   ],
+   "start": 5.25,
+   "end": 7.03,
+   "offset": 0.0
+  },
+  {
+   "scene": "M4 المبخرة",
+   "type": "clip",
+   "src": "clips/M4_burner.mp4",
+   "offset": 0.0,
+   "start": 7.03,
+   "end": 8.68,
+   "zoom": null
+  },
+  {
+   "scene": "M5 العلبة",
+   "type": "still",
+   "src": "images/m05_box_final.png",
+   "zoom": [
+    1.0,
+    1.14
+   ],
+   "center": [
+    570,
+    1130
+   ],
+   "start": 8.68,
+   "end": 11.62,
+   "offset": 0.0
+  },
+  {
+   "scene": "M6 المجلس قريب",
+   "type": "clip",
+   "src": "clips/M1_majlis.mp4",
+   "offset": 3.0,
+   "push": [
+    1.22,
+    1.32,
+    660,
+    1290
+   ],
+   "start": 11.62,
+   "end": 13.25,
+   "zoom": null
+  },
+  {
+   "scene": "M7 الله",
+   "type": "clip",
+   "src": "clips/M4_burner.mp4",
+   "offset": 1.65,
+   "start": 13.25,
+   "end": 15.85,
+   "zoom": null
+  },
+  {
+   "scene": "M8 الكومة",
+   "type": "still",
+   "src": "/home/user/canva21/kinam_diff/images/d03_pieces_final.png",
+   "zoom": [
+    1.0,
+    1.25
+   ],
+   "center": [
+    541,
+    1048
+   ],
+   "start": 15.85,
+   "end": 17.35,
+   "offset": 0.0
+  },
+  {
+   "scene": "M9 القطعة",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam/clips/raw/S02.mp4",
+   "offset": 0.6,
+   "start": 17.35,
+   "end": 18.58,
+   "zoom": null
+  },
+  {
+   "scene": "M10 الجمر",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam/clips/raw/S04.mp4",
+   "offset": 0.2,
+   "start": 18.58,
+   "end": 21.0,
+   "zoom": null
+  },
+  {
+   "scene": "M11 الأثر",
+   "type": "clip",
+   "src": "clips/M1_majlis.mp4",
+   "offset": 2.4,
+   "push": [
+    1.0,
+    1.06,
+    540,
+    1100
+   ],
+   "start": 21.0,
+   "end": 23.08,
+   "zoom": null
+  },
+  {
+   "scene": "M12 الكرم",
+   "type": "still",
+   "src": "images/m03_coffee_final.png",
+   "zoom": [
+    1.16,
+    1.0
+   ],
+   "center": [
+    640,
+    1250
+   ],
+   "start": 23.08,
+   "end": 25.95,
+   "offset": 0.0
+  },
+  {
+   "scene": "M13 الضمان",
+   "type": "still",
+   "src": "images/g01_card_majlis.png",
+   "zoom": [
+    1.3,
+    1.45
+   ],
+   "center": [
+    800,
+    1350
+   ],
+   "start": 25.95,
+   "end": 29.52,
+   "sweep": [
+    0.9,
+    2.2
+   ],
+   "offset": 0.0
+  },
+  {
+   "scene": "M14 الختام",
+   "type": "still",
+   "src": "images/m05_box_final.png",
+   "zoom": [
+    1.16,
+    1.0
+   ],
+   "center": [
+    570,
+    1130
+   ],
+   "start": 29.52,
+   "end": 33.67,
+   "offset": 0.0
+  }
+ ]
+}
