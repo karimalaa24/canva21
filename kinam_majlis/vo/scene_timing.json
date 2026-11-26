@@ -11,19 +11,12 @@
   },
   {
    "scene": "M2 الباب",
-   "type": "still",
-   "src": "images/m02_door_final.png",
-   "zoom": [
-    1.0,
-    1.12
-   ],
-   "center": [
-    560,
-    1050
-   ],
+   "type": "clip",
+   "src": "clips/M2_door.mp4",
+   "zoom": null,
    "start": 3.83,
    "end": 5.25,
-   "offset": 0.0
+   "offset": 0.3
   },
   {
    "scene": "M3 القهوة",
