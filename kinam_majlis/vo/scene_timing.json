@@ -27,19 +27,12 @@
   },
   {
    "scene": "M3 القهوة",
-   "type": "still",
-   "src": "images/m03_coffee_final.png",
-   "zoom": [
-    1.0,
-    1.1
-   ],
-   "center": [
-    640,
-    1250
-   ],
+   "type": "clip",
+   "src": "clips/M3_coffee.mp4",
+   "zoom": null,
    "start": 5.25,
    "end": 7.03,
-   "offset": 0.0
+   "offset": 0.25
   },
   {
    "scene": "M4 المبخرة",
@@ -141,19 +134,18 @@
   },
   {
    "scene": "M12 الكرم",
-   "type": "still",
-   "src": "images/m03_coffee_final.png",
-   "zoom": [
-    1.16,
-    1.0
-   ],
-   "center": [
-    640,
-    1250
-   ],
+   "type": "clip",
+   "src": "clips/M12_door.mp4",
+   "zoom": null,
    "start": 23.08,
    "end": 25.95,
-   "offset": 0.0
+   "offset": 2.05,
+   "push": [
+    1.0,
+    1.06,
+    520,
+    1150
+   ]
   },
   {
    "scene": "M13 الضمان",
