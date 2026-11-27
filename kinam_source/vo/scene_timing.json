@@ -19,18 +19,11 @@
   {
    "scene": "S2 الفرز",
    "type": "clip",
-   "src": "clips/S2_sorting.mp4",
+   "src": "clips/S2_sorting_v3_slow.mp4",
    "zoom": null,
    "start": 3.09,
    "end": 7.64,
-   "offset": 0.0,
-   "speed": 0.8,
-   "push": [
-    1.08,
-    1.12,
-    480,
-    1000
-   ]
+   "offset": 0.0
   },
   {
    "scene": "S3 الفحص",
