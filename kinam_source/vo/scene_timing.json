@@ -1,0 +1,148 @@
+{
+ "scenes": [
+  {
+   "scene": "S1 الكومة",
+   "type": "still",
+   "src": "/home/user/canva21/kinam_diff/images/d03_pieces_final.png",
+   "zoom": [
+    1.0,
+    1.25
+   ],
+   "center": [
+    541,
+    1048
+   ],
+   "start": 0,
+   "end": 3.09,
+   "offset": 0.0
+  },
+  {
+   "scene": "S2 الفرز",
+   "type": "still",
+   "src": "images/s01_sorting_final.png",
+   "zoom": [
+    1.0,
+    1.12
+   ],
+   "center": [
+    520,
+    1060
+   ],
+   "start": 3.09,
+   "end": 7.64,
+   "offset": 0.0
+  },
+  {
+   "scene": "S3 الفحص",
+   "type": "still",
+   "src": "images/s02_inspect_final.png",
+   "zoom": [
+    1.0,
+    1.1
+   ],
+   "center": [
+    520,
+    700
+   ],
+   "start": 7.64,
+   "end": 9.73,
+   "offset": 0.0
+  },
+  {
+   "scene": "S4 القطعة",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam/clips/raw/S02.mp4",
+   "offset": 0.0,
+   "speed": 0.7,
+   "start": 9.73,
+   "end": 13.7,
+   "zoom": null
+  },
+  {
+   "scene": "S5 الجمر",
+   "type": "clip",
+   "src": "/home/user/canva21/kinam/clips/raw/S04.mp4",
+   "offset": 0.2,
+   "start": 13.7,
+   "end": 15.41,
+   "zoom": null
+  },
+  {
+   "scene": "S6 العلبة",
+   "type": "still",
+   "src": "images/s04_box_filled.png",
+   "zoom": [
+    1.55,
+    1.72
+   ],
+   "center": [
+    566,
+    975
+   ],
+   "start": 15.41,
+   "end": 18.9,
+   "offset": 0.0
+  },
+  {
+   "scene": "S7 الركن",
+   "type": "still",
+   "src": "images/s05_corner_final.png",
+   "zoom": [
+    1.6,
+    1.75
+   ],
+   "center": [
+    688,
+    1185
+   ],
+   "start": 18.9,
+   "end": 24.64,
+   "offset": 0.0
+  },
+  {
+   "scene": "S8 المجلس",
+   "type": "clip",
+   "src": "clips/S8_majlis.mp4",
+   "offset": 0.0,
+   "start": 24.64,
+   "end": 27.16,
+   "zoom": null
+  },
+  {
+   "scene": "S9 الضمان",
+   "type": "still",
+   "src": "images/s06_card_final.png",
+   "zoom": [
+    1.55,
+    1.68
+   ],
+   "center": [
+    616,
+    1090
+   ],
+   "start": 27.16,
+   "end": 30.75,
+   "sweep": [
+    0.5,
+    1.8
+   ],
+   "offset": 0.0
+  },
+  {
+   "scene": "S10 الختام",
+   "type": "still",
+   "src": "images/s05_corner_final.png",
+   "zoom": [
+    1.0,
+    1.08
+   ],
+   "center": [
+    560,
+    1100
+   ],
+   "start": 30.75,
+   "end": 34.8,
+   "offset": 0.0
+  }
+ ]
+}
