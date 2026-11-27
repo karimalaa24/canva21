@@ -18,32 +18,25 @@
   },
   {
    "scene": "S2 الفرز",
-   "type": "still",
-   "src": "images/s01_sorting_final.png",
-   "zoom": [
-    1.0,
-    1.12
-   ],
-   "center": [
-    520,
-    1060
-   ],
+   "type": "clip",
+   "src": "clips/S2_sorting.mp4",
+   "zoom": null,
    "start": 3.09,
    "end": 7.64,
-   "offset": 0.0
+   "offset": 0.0,
+   "speed": 0.8,
+   "push": [
+    1.08,
+    1.12,
+    480,
+    1000
+   ]
   },
   {
    "scene": "S3 الفحص",
-   "type": "still",
-   "src": "images/s02_inspect_final.png",
-   "zoom": [
-    1.0,
-    1.1
-   ],
-   "center": [
-    520,
-    700
-   ],
+   "type": "clip",
+   "src": "clips/S3_inspect_slow.mp4",
+   "zoom": null,
    "start": 7.64,
    "end": 9.73,
    "offset": 0.0
